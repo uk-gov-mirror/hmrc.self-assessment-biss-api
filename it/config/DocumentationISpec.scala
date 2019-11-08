@@ -40,7 +40,7 @@ class DocumentationISpec extends IntegrationBaseSpec {
       |  "api":{
       |    "name":"Business Income Source Summary (MTD)",
       |    "description":"An API for providing Business Income Source Summary data",
-      |    "context":"mtd/template",
+      |    "context":"individuals/self-assessment/income-summary",
       |    "versions":[
       |      {
       |        "version":"1.0",
