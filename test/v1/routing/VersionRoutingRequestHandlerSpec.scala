@@ -23,6 +23,7 @@ import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
 import org.scalatest.{Inside, Matchers}
+import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.{HttpConfiguration, HttpErrorHandler, HttpFilters}
@@ -35,36 +36,37 @@ import routing.{VersionRoutingMap, VersionRoutingRequestHandler}
 import support.UnitSpec
 import v1.models.errors.{InvalidAcceptHeaderError, UnsupportedVersionError}
 
-class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockFactory with Inside with MockAppConfig{
+class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockFactory with Inside with MockAppConfig with GuiceOneAppPerSuite {
   test =>
 
   implicit private val actorSystem: ActorSystem = ActorSystem("test")
-  implicit private val mat: Materializer        = ActorMaterializer()
+  implicit private val mat: Materializer = ActorMaterializer()
+  val action: DefaultActionBuilder = app.injector.instanceOf[DefaultActionBuilder]
 
   private val defaultRouter = mock[Router]
-  private val v1Router      = mock[Router]
-  private val v2Router      = mock[Router]
-  private val v3Router      = mock[Router]
+  private val v1Router = mock[Router]
+  private val v2Router = mock[Router]
+  private val v3Router = mock[Router]
 
   private val routingMap = new VersionRoutingMap {
     override val defaultRouter: Router = test.defaultRouter
-    override val map           = Map("1.0" -> v1Router, "2.0" -> v2Router, "3.0" -> v3Router)
+    override val map: Map[String, Router] = Map("1.0" -> v1Router, "2.0" -> v2Router, "3.0" -> v3Router)
   }
 
   class Test(implicit acceptHeader: Option[String]) {
     val httpConfiguration = HttpConfiguration("context")
-    private val errorHandler      = mock[HttpErrorHandler]
-    private val filters           = mock[HttpFilters]
+    private val errorHandler = mock[HttpErrorHandler]
+    private val filters = mock[HttpFilters]
     (filters.filters _).stubs().returns(Seq.empty)
 
-    MockedAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString("""
-                                                                           |version-1.enabled = true
-                                                                           |version-2.enabled = true
-                                                                         """.stripMargin))))
+    MockedAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString(
+      """
+        |version-1.enabled = true
+        |version-2.enabled = true
+      """.stripMargin))))
 
-    //noinspection ScalaDeprecation
     val requestHandler: VersionRoutingRequestHandler =
-      new VersionRoutingRequestHandler(routingMap, errorHandler, httpConfiguration, mockAppConfig, filters, Action)
+      new VersionRoutingRequestHandler(routingMap, errorHandler, httpConfiguration, mockAppConfig, filters, action)
 
     def stubHandling(router: Router, path: String)(handler: Option[Handler]): CallHandler1[RequestHeader, Option[Handler]] =
       (router.handlerFor _)
@@ -151,7 +153,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockF
 
         private val request = buildRequest("path")
         inside(requestHandler.routeRequest(request)) {
-          case Some(a:EssentialAction) =>
+          case Some(a: EssentialAction) =>
             val result = a.apply(request)
 
             status(result) shouldBe NOT_FOUND
