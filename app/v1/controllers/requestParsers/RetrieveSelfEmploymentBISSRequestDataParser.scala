@@ -18,14 +18,12 @@ package v1.controllers.requestParsers
 
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
-import v1.controllers.requestParsers.validators.SampleValidator
-import v1.models.domain.SampleRequestBody
-import v1.models.requestData.{DesTaxYear, SampleRawData, SampleRequestData}
+import v1.controllers.requestParsers.validators.RetrieveSelfEmploymentBISSValidator
+import v1.models.requestData.{DesTaxYear, RetrieveSelfEmploymentBISSRawData, RetrieveSelfEmploymentBISSRequest}
 
-class SampleRequestDataParser @Inject()(val validator: SampleValidator)
-  extends RequestParser[SampleRawData, SampleRequestData] {
+class RetrieveSelfEmploymentBISSRequestDataParser @Inject()(val validator: RetrieveSelfEmploymentBISSValidator)
+  extends RequestParser[RetrieveSelfEmploymentBISSRawData, RetrieveSelfEmploymentBISSRequest] {
 
-  override protected def requestFor(data: SampleRawData): SampleRequestData =
-    SampleRequestData(Nino(data.nino), DesTaxYear.fromMtd(data.taxYear), data.body.as[SampleRequestBody])
-
+  override protected def requestFor(data: RetrieveSelfEmploymentBISSRawData): RetrieveSelfEmploymentBISSRequest =
+    RetrieveSelfEmploymentBISSRequest(Nino(data.nino), data.taxYear.map(DesTaxYear.fromMtd), data.selfEmploymentId)
 }

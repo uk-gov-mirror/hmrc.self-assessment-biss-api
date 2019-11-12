@@ -14,6 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.requestData
+package v1.controllers.requestParsers.validators.validations
 
-case class RetrieveSelfEmploymentBISSRawData(nino: String, taxYear: Option[String], selfEmploymentId: String) extends RawData
+import v1.models.errors.{MtdError, SelfEmploymentIdFormatError}
+
+object SelfEmploymentIdValidation {
+
+  private val regex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
+
+  def validate(selfEmploymentId: String): List[MtdError] =
+    if(selfEmploymentId.matches(regex)) List() else List(SelfEmploymentIdFormatError)
+
+}
