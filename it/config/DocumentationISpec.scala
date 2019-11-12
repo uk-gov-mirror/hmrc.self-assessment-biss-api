@@ -28,13 +28,13 @@ class DocumentationISpec extends IntegrationBaseSpec {
       |  "scopes":[
       |    {
       |      "key":"read:self-assessment",
-      |      "name":"View your Business Income Source Summary information",
-      |      "description":"Allow read access to Business Income Source Summary data"
+      |      "name":"View your Self Assessment information",
+      |      "description":"Allow read access to self assessment data"
       |    },
       |    {
       |      "key":"write:self-assessment",
-      |      "name":"Change your Business Income Source Summary information",
-      |      "description":"Allow write access to Business Income Source Summary data"
+      |      "name":"Change your Self Assessment information",
+      |      "description":"Allow write access to self assessment data"
       |    }
       |  ],
       |  "api":{
