@@ -18,4 +18,4 @@ package v1.models.requestData
 
 import uk.gov.hmrc.domain.Nino
 
-case class RetrieveSelfEmploymentBISSRequest(nino: Nino, taxYear: DesTaxYear, selfEmploymentId: String)
+case class RetrieveSelfEmploymentBISSRequest(nino: Nino, taxYear: Option[DesTaxYear], selfEmploymentId: String)
