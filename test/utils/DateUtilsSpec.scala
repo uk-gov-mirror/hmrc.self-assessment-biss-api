@@ -14,8 +14,22 @@
  * limitations under the License.
  */
 
-package v1.models.requestData
+package utils
 
-import uk.gov.hmrc.domain.Nino
+import support.UnitSpec
+import v1.models.requestData.DesTaxYear
 
-case class RetrieveSelfEmploymentBISSRequest(nino: Nino, taxYear: DesTaxYear, selfEmploymentId: String)
+class DateUtilsSpec extends UnitSpec{
+
+  "getDesTaxYear" should {
+    "return a valid DesTaxYear" when {
+      "mtd formatted string tax year is supplied" in {
+        DateUtils.getDesTaxYear(Some("2018-19")) shouldBe DesTaxYear("2019")
+      }
+
+      "no tax year is supplied" in {
+        DateUtils.getDesTaxYear(None) shouldBe DesTaxYear("2020")
+      }
+    }
+  }
+}
