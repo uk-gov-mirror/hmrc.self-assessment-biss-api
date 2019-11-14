@@ -16,19 +16,29 @@
 
 package utils
 
+import java.time.{LocalDate, Year}
+
 import support.UnitSpec
 import v1.models.requestData.DesTaxYear
 
 class DateUtilsSpec extends UnitSpec{
 
-  "getDesTaxYear" should {
+  "getDesTaxYear with tax year param" should {
     "return a valid DesTaxYear" when {
       "mtd formatted string tax year is supplied" in {
-        DateUtils.getDesTaxYear(Some("2018-19")) shouldBe DesTaxYear("2019")
+        DateUtils.getDesTaxYear("2018-19") shouldBe DesTaxYear("2019")
+      }
+    }
+  }
+
+  "getDesTaxYear with date param" should {
+    "return a valid DesTaxYear" when {
+      "no tax year is supplied when the date is 5th April of the current year" in {
+        DateUtils.getDesTaxYear(LocalDate.parse(s"2019-04-05")) shouldBe DesTaxYear("2019")
       }
 
-      "no tax year is supplied" in {
-        DateUtils.getDesTaxYear(None) shouldBe DesTaxYear("2020")
+      "no tax year is supplied when the date is 6th April of the current year" in {
+        DateUtils.getDesTaxYear(LocalDate.parse("2019-04-06")) shouldBe DesTaxYear("2020")
       }
     }
   }
