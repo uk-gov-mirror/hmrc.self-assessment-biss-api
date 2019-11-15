@@ -4,16 +4,13 @@
   "description": "Sample Endpoint",
   "type": "object",
   "properties": {
-    "aFieldUsedAcrossMultipleSchemas": { "$ref": "definitions.json#/definitions/uid" },
-    "aFieldDefinedInline": {
+    "data": {
       "description": "a field defined within the schema",
       "type": "string",
       "example": "example"
-    },
-    "links": { "$ref": "definitions.json#/definitions/hateoasLinks"}
+    }
   },
   "required": [
-    "aFieldUsedAcrossMultipleSchemas",
-    "aFieldDefinedInline"
+    "data"
   ]
 }
