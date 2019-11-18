@@ -56,7 +56,7 @@ class AuthISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the sample endpoint" when {
+  "Calling the GET self employment BISS endpoint" when {
 
     "the NINO cannot be converted to a MTD ID" should {
 
