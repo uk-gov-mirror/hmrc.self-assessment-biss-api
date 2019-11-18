@@ -14,13 +14,15 @@
  * limitations under the License.
  */
 
-package v1.models.des
+package v1.controllers.requestParsers.validators.validations
 
-import support.UnitSpec
-import utils.enums.EnumJsonSpecSupport
-import v1.models.des.IncomeSourceType._
+import v1.models.errors.{MtdError, TypeOfBusinessFormatError}
 
-class IncomeSourceTypeSpec extends UnitSpec with EnumJsonSpecSupport {
+object UKPropertyTypeOfBusinessValidation {
 
-  testRoundTrip[IncomeSourceType](("uk-property", `uk-property`), ("fhl-property-uk", `fhl-property-uk`))
+  val ukPropertyFHL = "uk-property-fhl"
+  val ukPropertyNonFHL = "uk-property-non-fhl"
+
+  def validate(typeOfBusiness: String): List[MtdError] =
+    if (typeOfBusiness == ukPropertyNonFHL || typeOfBusiness == ukPropertyFHL) List() else List(TypeOfBusinessFormatError)
 }
