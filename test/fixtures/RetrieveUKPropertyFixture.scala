@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-package v1.models.response
+package fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import support.UnitSpec
+import v1.models.response.RetrieveUKPropertyBISSResponse
 import v1.models.response.common.{Loss, Profit, Total}
 
-class RetrieveUKPropertyBISSResponseSpec extends UnitSpec {
+object RetrieveUKPropertyFixture {
 
-  val json: JsValue = Json.parse(
+
+  val mtdResponse: JsValue = Json.parse(
     """
       |{
       |  "total": {
@@ -42,33 +43,20 @@ class RetrieveUKPropertyBISSResponseSpec extends UnitSpec {
       |}
     """.stripMargin)
 
-  val desJsonFull: JsValue = Json.parse(
+  val mtdResponseWithOnlyRequiredData: JsValue = Json.parse(
     """
       |{
-      | "totalIncome": 100.00,
-      | "totalExpenses" : 50.00,
-      | "totalAdditions" : 5.00,
-      | "totalDeductions" : 60.00,
-      | "netProfit": 20.00,
-      | "taxableProfit" : 10.00,
-      | "netLoss": 10.00,
-      | "taxableLoss" : 35.00
+      |  "total": {
+      |    "income": 100.00,
+      |    "expenses": 50.00,
+      |    "additions": 5.00,
+      |    "deductions": 60.00
+      |  }
       |}
     """.stripMargin)
 
-  val desJsonMinimal: JsValue = Json.parse("""
-    |{
-    | "totalIncome": 100.00,
-    | "totalExpenses" : 50.00,
-    | "totalAdditions" : 5.00,
-    | "totalDeductions" : 60.00
-    |}
-  """.stripMargin)
-
-  val jsonString: String ="""{"total":{"income":100.00,"expenses":50.00,"additions":5.00,"deductions":60.00},"profit":{"net":20.00,"taxable":10.00},"loss":{"net":10.00,"taxable":35.00}}"""
-
-  val model =
-    RetrieveUKPropertyBISSResponse (
+  val responseObj =
+    RetrieveUKPropertyBISSResponse(
       Total(
         income = 100.00,
         expenses = Some(50.00),
@@ -85,35 +73,38 @@ class RetrieveUKPropertyBISSResponseSpec extends UnitSpec {
       ))
     )
 
-  val modelMinimal =
-    RetrieveUKPropertyBISSResponse (
+  val responseObjWithOnlyRequiredData =
+    RetrieveUKPropertyBISSResponse(
       Total(
         income = 100.00,
         expenses = Some(50.00),
         additions = Some(5.00),
         deductions = Some(60.00)
       ),
-      None,
-      None
+      None, None
     )
 
+  val desResponse: JsValue = Json.parse(
+    """
+      |{
+      | "totalIncome": 100.00,
+      | "totalExpenses" : 50.00,
+      | "totalAdditions" : 5.00,
+      | "totalDeductions" : 60.00,
+      | "netProfit": 20.00,
+      | "taxableProfit" : 10.00,
+      | "netLoss": 10.00,
+      | "taxableLoss" : 35.00
+      |}
+    """.stripMargin)
 
-  "RetrieveUKPropertyBISSResponse" should {
-
-    "write correctly to json" in {
-      Json.toJson(model) shouldBe json
-    }
-
-    "read correctly from json with full set of data" in {
-      desJsonFull.as[RetrieveUKPropertyBISSResponse] shouldBe model
-    }
-    "read correctly from json with only mandatory set of data" in {
-      desJsonMinimal.as[RetrieveUKPropertyBISSResponse] shouldBe modelMinimal
-    }
-
-
-    "toJsonString" in {
-      model.toJsonString shouldBe jsonString
-    }
-  }
+  val desResponseWithOnlyRequiredData: JsValue = Json.parse(
+    """
+      |{
+      | "totalIncome": 100.00,
+      | "totalExpenses" : 50.00,
+      | "totalAdditions" : 5.00,
+      | "totalDeductions" : 60.00
+      |}
+    """.stripMargin)
 }
