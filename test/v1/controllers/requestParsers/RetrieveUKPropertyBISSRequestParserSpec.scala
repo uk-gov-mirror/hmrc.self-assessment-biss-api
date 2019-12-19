@@ -30,8 +30,8 @@ class RetrieveUKPropertyBISSRequestParserSpec extends UnitSpec {
 
   private val nino = "AA123456B"
   private val taxYear = "2018-19"
-  private val typeOfBusinessNonFhl = "uk-property-non-fhl"
-  private val typeOfBusinessFhl = "uk-property-fhl"
+  private val typeOfBusinessNonFhl = Some("uk-property-non-fhl")
+  private val typeOfBusinessFhl = Some("uk-property-fhl")
 
   private val inputData = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessNonFhl)
   private val inputDataTwo = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessFhl)

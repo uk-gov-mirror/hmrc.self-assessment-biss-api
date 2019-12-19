@@ -48,7 +48,7 @@ class RetrieveUKPropertyBISSController @Inject()(
       endpointName = "retrieveUkPropertyBiss"
     )
 
-  def retrieveBiss(nino: String, taxYear: Option[String], typeOfBusiness: String): Action[AnyContent] =
+  def retrieveBiss(nino: String, taxYear: Option[String], typeOfBusiness: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       val rawData = RetrieveUKPropertyBISSRawData(nino, taxYear, typeOfBusiness)
       val result =

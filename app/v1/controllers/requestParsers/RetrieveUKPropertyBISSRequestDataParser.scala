@@ -32,8 +32,8 @@ class RetrieveUKPropertyBISSRequestDataParser @Inject()(val validator: RetrieveU
     RetrieveUKPropertyBISSRequest(Nino(data.nino),
       data.taxYear.fold(DateUtils.getDesTaxYear(LocalDate.now()))(DateUtils.getDesTaxYear),
       data.typeOfBusiness match {
-        case "uk-property-fhl" => IncomeSourceType.`fhl-property-uk`
-        case "uk-property-non-fhl" => IncomeSourceType.`uk-property`
+        case Some("uk-property-fhl") => IncomeSourceType.`fhl-property-uk`
+        case Some("uk-property-non-fhl") => IncomeSourceType.`uk-property`
       })
   }
 }

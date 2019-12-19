@@ -44,6 +44,9 @@ object RuleTaxYearRangeInvalidError
 object RuleSelfEmploymentIdError
   extends MtdError("RULE_SELF_EMPLOYMENT_ID", "A self-employment ID must be supplied for a self-employment business")
 
+object RuleTypeOfBusinessError
+  extends MtdError("RULE_TYPE_OF_BUSINESS", "A type of business was not provided")
+
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")
 

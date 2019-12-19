@@ -16,13 +16,16 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{MtdError, TypeOfBusinessFormatError}
+import v1.models.errors.{MtdError, RuleTypeOfBusinessError, TypeOfBusinessFormatError}
 
 object UKPropertyTypeOfBusinessValidation {
 
   val ukPropertyFHL = "uk-property-fhl"
   val ukPropertyNonFHL = "uk-property-non-fhl"
 
-  def validate(typeOfBusiness: String): List[MtdError] =
-    if (typeOfBusiness == ukPropertyNonFHL || typeOfBusiness == ukPropertyFHL) List() else List(TypeOfBusinessFormatError)
+  def validate(typeOfBusiness: Option[String]): List[MtdError] =
+    typeOfBusiness match {
+      case Some(i) =>  if (i == ukPropertyNonFHL || i == ukPropertyFHL) List() else List(TypeOfBusinessFormatError)
+      case None => List(RuleTypeOfBusinessError)
+  }
 }

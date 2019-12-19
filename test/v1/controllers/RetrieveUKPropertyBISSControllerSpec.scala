@@ -57,8 +57,8 @@ class RetrieveUKPropertyBISSControllerSpec
 
   private val nino            = "AA123456A"
   private val taxYear         =  Some("2018-19")
-  private val typeOfBusiness  = "uk-property-fhl"
-  private val secondTypeOfBusiness  = "uk-property-non-fhl"
+  private val typeOfBusiness  = Some("uk-property-fhl")
+  private val secondTypeOfBusiness  = Some("uk-property-non-fhl")
   private val correlationId   = "X-123"
 
   val response =
