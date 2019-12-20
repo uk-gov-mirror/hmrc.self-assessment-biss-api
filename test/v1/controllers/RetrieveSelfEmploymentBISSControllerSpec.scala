@@ -133,7 +133,8 @@ class RetrieveSelfEmploymentBISSControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (SelfEmploymentIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (RuleTypeOfBusinessError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))
