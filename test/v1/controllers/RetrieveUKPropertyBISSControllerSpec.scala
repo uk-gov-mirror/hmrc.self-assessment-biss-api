@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,8 +57,8 @@ class RetrieveUKPropertyBISSControllerSpec
 
   private val nino            = "AA123456A"
   private val taxYear         =  Some("2018-19")
-  private val typeOfBusiness  = "uk-property-fhl"
-  private val secondTypeOfBusiness  = "uk-property-non-fhl"
+  private val typeOfBusiness  = Some("uk-property-fhl")
+  private val secondTypeOfBusiness  = Some("uk-property-non-fhl")
   private val correlationId   = "X-123"
 
   val response =

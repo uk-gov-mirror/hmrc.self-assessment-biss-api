@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -75,7 +75,7 @@ class RetrieveSelfEmploymentBISSController @Inject()(
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | SelfEmploymentIdFormatError | RuleTaxYearRangeInvalidError =>
+      case BadRequestError | NinoFormatError | TaxYearFormatError | SelfEmploymentIdFormatError | RuleTaxYearRangeInvalidError | RuleTypeOfBusinessError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError   => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

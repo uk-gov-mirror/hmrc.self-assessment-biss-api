@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,4 +16,4 @@
 
 package v1.models.requestData
 
-case class RetrieveUKPropertyBISSRawData(nino: String, taxYear: Option[String], typeOfBusiness: String) extends RawData
+case class RetrieveUKPropertyBISSRawData(nino: String, taxYear: Option[String], typeOfBusiness: Option[String]) extends RawData

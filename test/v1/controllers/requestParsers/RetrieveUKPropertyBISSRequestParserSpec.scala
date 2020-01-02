@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,8 @@ class RetrieveUKPropertyBISSRequestParserSpec extends UnitSpec {
 
   private val nino = "AA123456B"
   private val taxYear = "2018-19"
-  private val typeOfBusinessNonFhl = "uk-property-non-fhl"
-  private val typeOfBusinessFhl = "uk-property-fhl"
+  private val typeOfBusinessNonFhl = Some("uk-property-non-fhl")
+  private val typeOfBusinessFhl = Some("uk-property-fhl")
 
   private val inputData = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessNonFhl)
   private val inputDataTwo = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessFhl)

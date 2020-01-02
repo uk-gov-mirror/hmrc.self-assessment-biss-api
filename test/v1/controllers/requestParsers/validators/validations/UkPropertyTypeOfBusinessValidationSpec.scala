@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,14 @@
 package v1.controllers.requestParsers.validators.validations
 
 import support.UnitSpec
-import v1.models.errors.TypeOfBusinessFormatError
+import v1.models.errors.{RuleTypeOfBusinessError, TypeOfBusinessFormatError}
 
 class UkPropertyTypeOfBusinessValidationSpec extends UnitSpec{
 
-  private val typeOfBusiness = "uk-property-fhl"
-  private val badTypeOfBusiness = "rabbit hair comb shop"
+  private val typeOfBusiness = Some("uk-property-fhl")
+  private val badTypeOfBusiness = Some("rabbit hair comb shop")
+  private val noTypeOfBusiness = None
+
   "validate" should {
     "return no errors" when {
       "a valid type of business is provided" in {
@@ -30,9 +32,15 @@ class UkPropertyTypeOfBusinessValidationSpec extends UnitSpec{
       }
     }
 
-    "return an error" when {
+    "return a type of business format error" when {
       "an invalid type of business is provided" in {
         UKPropertyTypeOfBusinessValidation.validate(badTypeOfBusiness) shouldBe List(TypeOfBusinessFormatError)
+      }
+    }
+
+    "return a rule type of business error" when {
+      "no type of business is provided" in {
+        UKPropertyTypeOfBusinessValidation.validate(noTypeOfBusiness) shouldBe List(RuleTypeOfBusinessError)
       }
     }
   }

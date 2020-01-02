@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,8 @@ class RetrieveUKPropertyBISSRequestDataParser @Inject()(val validator: RetrieveU
     RetrieveUKPropertyBISSRequest(Nino(data.nino),
       data.taxYear.fold(DateUtils.getDesTaxYear(LocalDate.now()))(DateUtils.getDesTaxYear),
       data.typeOfBusiness match {
-        case "uk-property-fhl" => IncomeSourceType.`fhl-property-uk`
-        case "uk-property-non-fhl" => IncomeSourceType.`uk-property`
+        case Some("uk-property-fhl") => IncomeSourceType.`fhl-property-uk`
+        case Some("uk-property-non-fhl") => IncomeSourceType.`uk-property`
       })
   }
 }

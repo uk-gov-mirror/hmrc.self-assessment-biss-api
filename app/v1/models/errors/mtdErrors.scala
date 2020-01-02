@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,9 @@ object RuleTaxYearRangeInvalidError
 
 object RuleSelfEmploymentIdError
   extends MtdError("RULE_SELF_EMPLOYMENT_ID", "A self-employment ID must be supplied for a self-employment business")
+
+object RuleTypeOfBusinessError
+  extends MtdError("RULE_TYPE_OF_BUSINESS", "A type of business must be supplied")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")

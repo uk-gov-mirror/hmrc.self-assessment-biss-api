@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,7 +48,7 @@ class RetrieveUKPropertyBISSController @Inject()(
       endpointName = "retrieveUkPropertyBiss"
     )
 
-  def retrieveBiss(nino: String, taxYear: Option[String], typeOfBusiness: String): Action[AnyContent] =
+  def retrieveBiss(nino: String, taxYear: Option[String], typeOfBusiness: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
       val rawData = RetrieveUKPropertyBISSRawData(nino, taxYear, typeOfBusiness)
       val result =
@@ -73,7 +73,7 @@ class RetrieveUKPropertyBISSController @Inject()(
 
   private def errorResult(errorWrapper: ErrorWrapper) = {
     errorWrapper.error match {
-      case BadRequestError | NinoFormatError | TaxYearFormatError | TypeOfBusinessFormatError | RuleTaxYearRangeInvalidError=>
+      case BadRequestError | NinoFormatError | TaxYearFormatError | TypeOfBusinessFormatError | RuleTaxYearRangeInvalidError | RuleTypeOfBusinessError =>
         BadRequest(Json.toJson(errorWrapper))
       case NotFoundError => NotFound(Json.toJson(errorWrapper))
       case DownstreamError => InternalServerError(Json.toJson(errorWrapper))

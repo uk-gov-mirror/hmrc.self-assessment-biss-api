@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * PCopyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import utils.DateUtils
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, TaxYearFormatError, TypeOfBusinessFormatError}
+import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTypeOfBusinessError, TaxYearFormatError, TypeOfBusinessFormatError}
 import v1.models.requestData.DesTaxYear
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
@@ -37,7 +37,7 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
 
     val nino = "AA123456A"
     val taxYear: Option[String] = Some("2018-19")
-    val typeOfBusiness: String = "uk-property-non-fhl"
+    val typeOfBusiness: Option[String] = Some("uk-property-non-fhl")
     val correlationId = "X-123"
     val desTaxYear: DesTaxYear = DesTaxYear("2019")
 
@@ -48,9 +48,11 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
     def setupStubs(): StubMapping
 
     def request: WSRequest = {
-      val queryParams: Seq[(String, String)] = taxYear match {
-        case Some(x) => Seq("taxYear" -> x, "typeOfBusiness" -> typeOfBusiness)
-        case None => Seq("typeOfBusiness" -> typeOfBusiness)
+      val queryParams: Seq[(String, String)] = (taxYear, typeOfBusiness) match {
+        case (Some(x), Some(y)) => Seq("taxYear" -> x, "typeOfBusiness" -> y)
+        case (None,Some(y)) => Seq("typeOfBusiness" -> y)
+        case (Some(x), None) => Seq("taxYear" -> x)
+        case (None, None) => Seq()
       }
 
 
@@ -120,12 +122,12 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
 
     "return error according to spec" when {
 
-      def validationErrorTest(requestNino: String, requestTaxYear: Option[String], requestBusiness: String, expectedStatus: Int, expectedBody: MtdError): Unit = {
+      def validationErrorTest(requestNino: String, requestTaxYear: Option[String], requestBusiness: Option[String], expectedStatus: Int, expectedBody: MtdError): Unit = {
         s"validation fails with ${expectedBody.code} error" in new Test {
 
           override val nino: String            = requestNino
           override val taxYear: Option[String] = requestTaxYear
-          override val typeOfBusiness: String  = requestBusiness
+          override val typeOfBusiness: Option[String]  = requestBusiness
 
           override def setupStubs(): StubMapping = {
             AuditStub.audit()
@@ -141,9 +143,10 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
       }
 
       val input = Seq(
-        ("AA1123A", None, "uk-property-non-fhl", BAD_REQUEST, NinoFormatError),
-        ("AA123456A", Some("20177"), "uk-property-fhl", BAD_REQUEST, TaxYearFormatError),
-        ("AA123456A", Some("2018-19"), "123456789", BAD_REQUEST, TypeOfBusinessFormatError)
+        ("AA1123A", None, Some("uk-property-non-fhl"), BAD_REQUEST, NinoFormatError),
+        ("AA123456A", Some("20177"), Some("uk-property-fhl"), BAD_REQUEST, TaxYearFormatError),
+        ("AA123456A", Some("2018-19"), Some("123456789"), BAD_REQUEST, TypeOfBusinessFormatError),
+        ("AA123456A", Some("2018-19"), None, BAD_REQUEST, RuleTypeOfBusinessError)
       )
 
       input.foreach(args => (validationErrorTest _).tupled(args))

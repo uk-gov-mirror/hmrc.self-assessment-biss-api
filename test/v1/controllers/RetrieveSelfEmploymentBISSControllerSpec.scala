@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,7 +133,8 @@ class RetrieveSelfEmploymentBISSControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (SelfEmploymentIdFormatError, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
-          (DownstreamError, INTERNAL_SERVER_ERROR)
+          (DownstreamError, INTERNAL_SERVER_ERROR),
+          (RuleTypeOfBusinessError, BAD_REQUEST)
         )
 
         input.foreach(args => (serviceErrors _).tupled(args))
