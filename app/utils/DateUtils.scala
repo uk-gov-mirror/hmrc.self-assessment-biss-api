@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 HM Revenue & Customs
+ * Copyright 2020 HM Revenue & Customs
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +16,18 @@
 
 package utils
 
-import java.time.{LocalDate, Year}
+import java.time.LocalDate
 
 import v1.models.requestData.DesTaxYear
 
 object DateUtils {
 
-  def getDesTaxYear(input: Any): DesTaxYear = input match {
+  def getDesTaxYear(dateProvided: Any): DesTaxYear = dateProvided match {
     case taxYear: String => DesTaxYear.fromMtd(taxYear)
     case current: LocalDate =>
-      val fiscalYearStartDate = LocalDate.parse(s"${Year.now().toString}-04-05")
+      val fiscalYearStartDate = LocalDate.parse(s"${current.getYear.toString}-04-05")
 
-      if(current.isAfter(fiscalYearStartDate)) DesTaxYear(Year.now().getValue.+(1).toString)
-      else DesTaxYear(Year.now().getValue.toString)
+      if(current.isAfter(fiscalYearStartDate)) DesTaxYear((current.getYear + 1).toString)
+      else DesTaxYear(current.getYear.toString)
   }
 }
