@@ -16,7 +16,6 @@
 
 package v1.controllers
 
-import javax.inject.Inject
 import play.api.http.HttpEntity
 import play.api.mvc.{ResponseHeader, Result}
 import support.UnitSpec

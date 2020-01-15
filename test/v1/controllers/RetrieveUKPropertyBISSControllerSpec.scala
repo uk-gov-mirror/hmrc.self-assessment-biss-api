@@ -24,7 +24,7 @@ import uk.gov.hmrc.http.HeaderCarrier
 import v1.mocks.requestParsers.MockRetrieveUKPropertyBISSRequestDataParser
 import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockUKPropertyBISSService}
 import v1.models.des.IncomeSourceType
-import v1.models.errors.{BadRequestError, DownstreamError, ErrorWrapper, MtdError, NinoFormatError, NotFoundError, SelfEmploymentIdFormatError, TaxYearFormatError, TypeOfBusinessFormatError}
+import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.{DesTaxYear, RetrieveUKPropertyBISSRawData, RetrieveUKPropertyBISSRequest}
 import v1.models.response.RetrieveUKPropertyBISSResponse
@@ -40,28 +40,13 @@ class RetrieveUKPropertyBISSControllerSpec
     with MockRetrieveUKPropertyBISSRequestDataParser
     with MockUKPropertyBISSService {
 
-  trait Test {
-  val hc = HeaderCarrier()
-
-    val controller = new RetrieveUKPropertyBISSController(
-      authService = mockEnrolmentsAuthService,
-      lookupService = mockMtdIdLookupService,
-      requestParser = mockRequestParser,
-      ukPropertyBISSService = mockService,
-      cc =  cc
-    )
-
-    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
-    MockedEnrolmentsAuthService.authoriseUser()
-  }
-
   private val nino            = "AA123456A"
   private val taxYear         =  Some("2018-19")
   private val typeOfBusiness  = Some("uk-property-fhl")
   private val secondTypeOfBusiness  = Some("uk-property-non-fhl")
   private val correlationId   = "X-123"
 
-  val response =
+  val response: RetrieveUKPropertyBISSResponse =
     RetrieveUKPropertyBISSResponse (
       Total(
         income = 100.00,
@@ -83,6 +68,21 @@ class RetrieveUKPropertyBISSControllerSpec
   private val rawDataTwo    = RetrieveUKPropertyBISSRawData(nino, taxYear, secondTypeOfBusiness)
   private val requestData = RetrieveUKPropertyBISSRequest(Nino(nino), DesTaxYear("2019"), IncomeSourceType.`uk-property`)
   private val requestDataTwo = RetrieveUKPropertyBISSRequest(Nino(nino), DesTaxYear("2019"), IncomeSourceType.`fhl-property-uk`)
+
+  trait Test {
+    val hc: HeaderCarrier = HeaderCarrier()
+
+    val controller = new RetrieveUKPropertyBISSController(
+      authService = mockEnrolmentsAuthService,
+      lookupService = mockMtdIdLookupService,
+      requestParser = mockRequestParser,
+      ukPropertyBISSService = mockService,
+      cc =  cc
+    )
+
+    MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
+    MockedEnrolmentsAuthService.authoriseUser()
+  }
 
   "retrieveBiss" should {
     "return successful response with status OK" when {

@@ -18,7 +18,6 @@ package v1.models.des
 
 import play.api.libs.json._
 import utils.enums.Enums
-import v1.models.domain.TypeOfBusiness
 
 sealed trait IncomeSourceType
 

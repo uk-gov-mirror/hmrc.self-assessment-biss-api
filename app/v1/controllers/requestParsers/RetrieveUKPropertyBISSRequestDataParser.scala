@@ -31,7 +31,7 @@ class RetrieveUKPropertyBISSRequestDataParser @Inject()(val validator: RetrieveU
   override protected def requestFor(data: RetrieveUKPropertyBISSRawData): RetrieveUKPropertyBISSRequest = {
     RetrieveUKPropertyBISSRequest(Nino(data.nino),
       data.taxYear.fold(DateUtils.getDesTaxYear(LocalDate.now()))(DateUtils.getDesTaxYear),
-      data.typeOfBusiness match {
+      (data.typeOfBusiness: @unchecked) match {
         case Some("uk-property-fhl") => IncomeSourceType.`fhl-property-uk`
         case Some("uk-property-non-fhl") => IncomeSourceType.`uk-property`
       })

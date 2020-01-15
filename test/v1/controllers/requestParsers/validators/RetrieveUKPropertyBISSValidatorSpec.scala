@@ -27,7 +27,6 @@ class RetrieveUKPropertyBISSValidatorSpec extends UnitSpec {
   private val typeOfBusiness = Some("uk-property-fhl")
   private val invalidNino = "~~~~~~~~~"
   private val invalidTaxYear = "2018-20"
-  private val tooEarlyTaxYear = "2016-17"
   private val invalidTypeOfBusiness = Some("pigs-with-little-shoes")
   private val missingTypeOfBusiness = None
 
