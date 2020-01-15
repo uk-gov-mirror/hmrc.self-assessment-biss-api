@@ -32,6 +32,4 @@ addSbtPlugin("org.scalastyle" %% "scalastyle-sbt-plugin" % "1.0.0")
 
 addSbtPlugin("org.scoverage" % "sbt-scoverage" % "1.6.1")
 
-addSbtPlugin("net.vonbuchholtz" % "sbt-dependency-check" % "0.2.10")
-
 addSbtPlugin("com.timushev.sbt" % "sbt-updates" % "0.3.4")
