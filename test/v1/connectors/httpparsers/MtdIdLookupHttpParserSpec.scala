@@ -23,7 +23,7 @@ import support.UnitSpec
 import uk.gov.hmrc.http.HttpResponse
 import v1.connectors.MtdIdLookupOutcome
 import v1.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
-import v1.models.errors.{DownstreamError, InvalidBearerTokenError, NinoFormatError, UnauthorisedError}
+import v1.models.errors.{DownstreamError, InvalidBearerTokenError, UnauthorisedError}
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {
 

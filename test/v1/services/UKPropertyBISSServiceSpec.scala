@@ -36,7 +36,6 @@ class UKPropertyBISSServiceSpec extends UnitSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2019"
-  private val selfEmploymentId = "123456789"
   private val correlationId = "X-123"
 
   private val requestData = RetrieveUKPropertyBISSRequest(Nino(nino), DesTaxYear(taxYear), IncomeSourceType.`uk-property`)

@@ -17,7 +17,7 @@
 package v1.controllers.requestParsers.validators
 
 import support.UnitSpec
-import v1.models.errors.{NinoFormatError, RuleTaxYearNotSupportedError, RuleTaxYearRangeInvalidError, SelfEmploymentIdFormatError, TaxYearFormatError}
+import v1.models.errors.{NinoFormatError, RuleTaxYearRangeInvalidError, SelfEmploymentIdFormatError}
 import v1.models.requestData.RetrieveSelfEmploymentBISSRawData
 
 class RetrieveSelfEmploymentBISSValidatorSpec extends UnitSpec {
@@ -28,7 +28,6 @@ class RetrieveSelfEmploymentBISSValidatorSpec extends UnitSpec {
   private val invalidNino = "~~~~~~~~~"
   private val invalidTaxYear = "2018-20"
   private val invalidSelfEmploymentId = "Actual Beans"
-  private val tooEarlyTaxYear = "2016-17"
 
   val validator = new RetrieveSelfEmploymentBISSValidator()
 

@@ -16,7 +16,7 @@
 
 package utils
 
-import java.time.{LocalDate, Year}
+import java.time.LocalDate
 
 import support.UnitSpec
 import v1.models.requestData.DesTaxYear

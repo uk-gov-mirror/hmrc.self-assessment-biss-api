@@ -43,6 +43,7 @@ class EnrolmentsAuthService @Inject()(val connector: AuthConnector) {
     .flatMap(_.getIdentifier("AgentReferenceNumber"))
     .map(_.value)
 
+  @unchecked
   def authorised(predicate: Predicate)(implicit hc: HeaderCarrier, ec: ExecutionContext): Future[AuthOutcome] = {
     authFunction.authorised(predicate).retrieve(affinityGroup and authorisedEnrolments) {
       case Some(Individual) ~ _ =>

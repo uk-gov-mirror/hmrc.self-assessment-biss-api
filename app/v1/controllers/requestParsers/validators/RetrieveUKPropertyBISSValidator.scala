@@ -17,8 +17,8 @@
 package v1.controllers.requestParsers.validators
 
 import v1.controllers.requestParsers.validators.validations._
-import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
-import v1.models.requestData.{RetrieveUKPropertyBISSRawData}
+import v1.models.errors.MtdError
+import v1.models.requestData.RetrieveUKPropertyBISSRawData
 
 class RetrieveUKPropertyBISSValidator  extends Validator[RetrieveUKPropertyBISSRawData] {
 

@@ -17,8 +17,7 @@
 package v1.stubs
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import play.api.http.Status.OK
-import play.api.libs.json.{JsValue, Json}
+import play.api.libs.json.JsValue
 import support.WireMockMethods
 
 object DesStub extends WireMockMethods {

@@ -22,7 +22,8 @@ import com.typesafe.config.ConfigFactory
 import mocks.MockAppConfig
 import org.scalamock.handlers.CallHandler1
 import org.scalamock.scalatest.MockFactory
-import org.scalatest.{Inside, Matchers}
+import org.scalatest.Inside
+import org.scalatest.matchers.should.Matchers
 import org.scalatestplus.play.guice.GuiceOneAppPerSuite
 import play.api.Configuration
 import play.api.http.HeaderNames.ACCEPT
@@ -54,7 +55,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockF
   }
 
   class Test(implicit acceptHeader: Option[String]) {
-    val httpConfiguration = HttpConfiguration("context")
+    private val httpConfiguration = HttpConfiguration("context")
     private val errorHandler = mock[HttpErrorHandler]
     private val filters = mock[HttpFilters]
     (filters.filters _).stubs().returns(Seq.empty)
@@ -98,7 +99,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockF
     implicit val acceptHeader: None.type = None
 
     "return 406" in new Test {
-      val handler: Handler = mock[Handler]
       stubHandling(defaultRouter, "path")(None)
 
       val request: RequestHeader = buildRequest("path")
@@ -127,7 +127,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockF
     implicit val acceptHeader: Some[String] = Some("application/vnd.hmrc.5.0+json")
 
     "return 404" in new Test {
-      val handler: Handler = mock[Handler]
       stubHandling(defaultRouter, "path")(None)
 
       private val request = buildRequest("path")
@@ -147,8 +146,6 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Matchers with MockF
 
     "the version has a route for the resource" must {
       "return 404 Not Found" in new Test {
-        val handler: Handler = mock[Handler]
-
         stubHandling(defaultRouter, "path")(None)
 
         private val request = buildRequest("path")
