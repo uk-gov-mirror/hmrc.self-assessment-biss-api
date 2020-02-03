@@ -9,15 +9,15 @@
     <tbody>
         <tr>
             <td><p>N/A - DEFAULT</p></td>
-            <td><p>Simulate successful response with profit</p></td>
+            <td><p>Simulates a successful response with profit</p></td>
         </tr>
         <tr>
             <td><p>LOSS</p></td>
-            <td><p>Simulate successful response with loss</p></td>
+            <td><p>Simulates a successful response with loss</p></td>
         </tr>
         <tr>
             <td><p>NOT_FOUND</p></td>
-            <td><p>Simulate scenario where no data can be found</p></td>
+            <td><p>Simulates a scenario where no data can be found</p></td>
         </tr>
     </tbody>
 </table>

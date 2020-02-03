@@ -7,7 +7,7 @@ traits:
   taxYear:
     queryParameters:
       taxYear:
-        description: 'The tax year to which the data applies, in the format YYYY-YY. If no tax year is supplied, then it will default to the current tax year.'
+        description: 'The tax year to which the data applies in the format YYYY-YY. If no tax year is supplied the default is the current tax year.'
         example: "2019-20"
         required: false
   selfEmploymentId:
@@ -19,5 +19,5 @@ traits:
   typeOfBusiness:
     queryParameters:
       typeOfBusiness:
-        description: "The type of business the summary calculation is for.<br><br>Limited to the following possible values: <br>`uk-property-non-fhl`<br>`uk-property-fhl`"
+        description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`uk-property-non-fhl`<br>`uk-property-fhl`"
         required: true
