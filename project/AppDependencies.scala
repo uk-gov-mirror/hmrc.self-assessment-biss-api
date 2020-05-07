@@ -20,27 +20,27 @@ import sbt._
 
 object AppDependencies {
 
-  val compile = Seq(
+  val compile: Seq[ModuleID] = Seq(
     ws,
-    "uk.gov.hmrc"   %% "bootstrap-play-26" % "1.5.0",
-    "uk.gov.hmrc"   %% "domain"            % "5.6.0-play-26",
+    "uk.gov.hmrc"   %% "bootstrap-play-26" % "1.7.0",
+    "uk.gov.hmrc"   %% "domain"            % "5.8.0-play-26",
     "uk.gov.hmrc"   %% "play-hmrc-api"     % "4.1.0-play-26",
-    "org.typelevel" %% "cats-core"         % "2.1.0",
+    "org.typelevel" %% "cats-core"         % "2.1.1",
     "com.chuusai"   %% "shapeless"         % "2.3.3",
-    compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.4.4" cross CrossVersion.full),
-    "com.github.ghik" % "silencer-lib" % "1.4.4" % Provided cross CrossVersion.full,
-    "org.json4s" %% "json4s-native" % "3.6.7",
-    "org.json4s" %% "json4s-ext" % "3.6.7"
+    compilerPlugin("com.github.ghik" % "silencer-plugin" % "1.7.0" cross CrossVersion.full),
+    "com.github.ghik" % "silencer-lib" % "1.7.0" % Provided cross CrossVersion.full,
+    "org.json4s" %% "json4s-native" % "3.6.8",
+    "org.json4s" %% "json4s-ext" % "3.6.8"
   )
 
   def test(scope: String = "test, it"): Seq[sbt.ModuleID] = Seq(
-    "org.scalatest"          %% "scalatest"          % "3.1.0"             % scope,
+    "org.scalatest"          %% "scalatest"          % "3.1.1"             % scope,
     "com.vladsch.flexmark"   % "flexmark-all"        % "0.35.10"           % scope,
     "org.scalacheck"         %% "scalacheck"         % "1.14.3"            % scope,
     "org.scalamock"          %% "scalamock"          % "4.4.0"             % scope,
     "com.typesafe.play"      %% "play-test"          % PlayVersion.current % scope,
     "org.scalatestplus.play" %% "scalatestplus-play" % "3.1.3"             % scope,
-    "com.github.tomakehurst" % "wiremock"            % "2.25.1"            % scope
+    "com.github.tomakehurst" % "wiremock"            % "2.26.3"            % scope
   )
 
   // Fixes a transitive dependency clash between wiremock and scalatestplus-play
