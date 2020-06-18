@@ -16,6 +16,6 @@
 
 package v1.models.requestData
 
-import v1.models.des.ForeignIncomeSourceType
+import v1.models.des.IncomeSourceType
 
-case class RetrieveForeignPropertyBissRequest(nino: String, businessId: String, typeOfBusiness: ForeignIncomeSourceType, taxYear: DesTaxYear)
+case class RetrieveForeignPropertyBissRequest(nino: String, businessId: String, typeOfBusiness: IncomeSourceType, taxYear: DesTaxYear)
