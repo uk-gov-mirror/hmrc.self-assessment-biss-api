@@ -28,10 +28,17 @@ class RetrieveForeignPropertyBISSResponseSpec extends UnitSpec {
       Json.toJson(responseObj) shouldBe mtdResponse
     }
 
+    "read correctly from json" in {
+      desResponse.as[RetrieveForeignPropertyBISSResponse] shouldBe responseObj
+    }
+
+    "read correctly from json with only required data" in {
+      desResponseWithOnlyRequiredData.as[RetrieveForeignPropertyBISSResponse] shouldBe responseObjWithOnlyRequiredData
+    }
+
+    "toJsonString" in {
+      responseObj.toJsonString shouldBe jsonString
+    }
+
   }
-
-
-
-
-
 }

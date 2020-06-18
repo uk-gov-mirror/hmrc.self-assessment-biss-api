@@ -56,6 +56,18 @@ object RetrieveForeignPropertyFixtures {
       |}
     """.stripMargin)
 
+  val desResponseWithOnlyRequiredData: JsValue = Json.parse(
+    """
+      |{
+      | "totalIncome": 100.00,
+      | "totalExpenses" : 50.00,
+      | "totalAdditions" : 5.00,
+      | "totalDeductions" : 60.00
+      |}
+    """.stripMargin)
+
+  val jsonString: String ="""{"total":{"income":100.00,"expenses":50.00,"additions":5.00,"deductions":60.00},"profit":{"net":20.00,"taxable":10.00},"loss":{"net":10.00,"taxable":35.00}}"""
+
   val responseObj =
   RetrieveForeignPropertyBISSResponse(
     Total(
@@ -73,4 +85,15 @@ object RetrieveForeignPropertyFixtures {
       taxable = Some(35.00)
     ))
   )
+
+  val responseObjWithOnlyRequiredData =
+    RetrieveForeignPropertyBISSResponse (
+      Total(
+        income = 100.00,
+        expenses = Some(50.00),
+        additions = Some(5.00),
+        deductions = Some(60.00)
+      ),
+      None, None
+    )
 }
