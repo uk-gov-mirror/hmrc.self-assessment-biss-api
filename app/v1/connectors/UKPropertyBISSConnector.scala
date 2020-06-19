@@ -40,7 +40,8 @@ class UKPropertyBISSConnector @Inject()(val http: HttpClient,
     val incomeSourceType = request.incomeSourceType.toString
 
     get(
-      DesUri[RetrieveUKPropertyBISSResponse](s"income-tax/income-sources/nino/$nino/$incomeSourceType/$taxYear/biss")
+      DesUri[RetrieveUKPropertyBISSResponse](
+        s"income-tax/income-sources/nino/$nino/$incomeSourceType/$taxYear/biss")
     )
   }
 
