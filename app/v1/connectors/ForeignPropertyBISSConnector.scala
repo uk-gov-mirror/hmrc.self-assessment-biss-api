@@ -16,32 +16,31 @@
 
 package v1.connectors
 
-import javax.inject.{Inject, Singleton}
-
 import config.AppConfig
-import uk.gov.hmrc.http.HeaderCarrier
+import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier}
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
-import v1.models.requestData.RetrieveUKPropertyBISSRequest
-import v1.models.response.RetrieveUKPropertyBISSResponse
+import v1.models.requestData.RetrieveForeignPropertyBISSRequest
+import v1.models.response.RetrieveForeignPropertyBISSResponse
 
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UKPropertyBISSConnector @Inject()(val http: HttpClient,
-                                        val appConfig: AppConfig) extends BaseDesConnector {
+class ForeignPropertyBISSConnector @Inject()(val http: HttpClient,
+                                             val appConfig: AppConfig) extends BaseDesConnector {
 
-  def retrieveBiss(request: RetrieveUKPropertyBISSRequest)(
-    implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[RetrieveUKPropertyBISSResponse]] = {
+  def retrieveBiss(request: RetrieveForeignPropertyBISSRequest)(
+    implicit ec: ExecutionContext,
+    hc: HeaderCarrier): Future[DesOutcome[RetrieveForeignPropertyBISSResponse]] = {
 
-    val nino = request.nino.nino
+    val nino = request.nino
+    val businessId = request.businessId
+    val typeOfBusiness = request.typeOfBusiness.toString
     val taxYear = request.taxYear.toString
-    val incomeSourceType = request.incomeSourceType.toString
 
     get(
-      DesUri[RetrieveUKPropertyBISSResponse](s"income-tax/income-sources/nino/$nino/$incomeSourceType/$taxYear/biss")
+      DesUri[RetrieveForeignPropertyBISSResponse](s"income-tax/income-sources/nino/$nino/$typeOfBusiness/$taxYear/biss?incomesourceid=$businessId")
     )
   }
-
 }
