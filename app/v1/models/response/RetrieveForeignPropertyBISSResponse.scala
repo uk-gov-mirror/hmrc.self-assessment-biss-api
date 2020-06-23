@@ -22,7 +22,6 @@ import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import v1.models.response.common.{Loss, Profit, Total}
 import play.api.libs.functional.syntax._
 
-
 case class RetrieveForeignPropertyBISSResponse(total: Total,
                                                profit: Option[Profit],
                                                loss: Option[Loss]) {
