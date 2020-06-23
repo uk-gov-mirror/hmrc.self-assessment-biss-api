@@ -21,3 +21,14 @@ traits:
       typeOfBusiness:
         description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`uk-property-non-fhl`<br>`uk-property-fhl`"
         required: true
+  businessId:
+    queryParameters:
+      businessId:
+        description: "An identifier for the foreign property business, unique to the customer. Must conform to the regular expression`^X[A-Z0-9]{1}IS[0-9]{11}$`"
+        example: "XAIS12345678910"
+        required: true
+  foreignTypeOfBusiness:
+    queryParameters:
+      typeOfBusiness:
+        description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`foreign-property-fhl-eea`<br>`foreign-property`"
+        required: true

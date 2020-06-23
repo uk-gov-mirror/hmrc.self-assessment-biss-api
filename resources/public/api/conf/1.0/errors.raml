@@ -82,15 +82,81 @@ traits:
               value:
                 code: MATCHING_RESOURCE_NOT_FOUND
   formatTypeOfBusiness:
-      responses:
-        400:
-          body:
-            application/json:
-              type: types.errorResponse
-              examples:
-                formatTypeOfBusiness:
-                  description: The format of the supplied type of business is not valid
-                  value:
-                    code: FORMAT_TYPE_OF_BUSINESS
+        responses:
+          400:
+            body:
+              application/json:
+                type: types.errorResponse
+                examples:
+                  formatTypeOfBusiness:
+                    description: The format of the supplied type of business is not valid
+                    value:
+                      code: FORMAT_TYPE_OF_BUSINESS
+  formatBusinessID:
+          responses:
+            400:
+              body:
+                application/json:
+                  type: types.errorResponse
+                  examples:
+                    formatBusinessID:
+                      description: The format of the supplied Business ID field is not valid
+                      value:
+                        code: FORMAT_BUSINESS_ID
+  ruleTaxYearNotSupported:
+            responses:
+              400:
+                body:
+                  application/json:
+                    type: types.errorResponse
+                    examples:
+                      ruleTaxYearNotSupported:
+                        description: The specified tax year is not supported, that is, the tax year specified is before the minimum tax year value
+                        value:
+                          code: RULE_TAX_YEAR_NOT_SUPPORTED
+  ruleTaxYearRangeExceeded:
+            responses:
+              400:
+                body:
+                  application/json:
+                    type: types.errorResponse
+                    examples:
+                      ruleTaxYearRangeExceeded:
+                        description: Tax year range exceeded. A tax year range of one year is required
+                        value:
+                          code: RULE_TAX_YEAR_RANGE_EXCEEDED
+  ruleBusinessId:
+              responses:
+                400:
+                  body:
+                    application/json:
+                      type: types.errorResponse
+                      examples:
+                        ruleBusinessId:
+                          description: A Business ID was not provided for a foreign property business
+                          value:
+                            code: RULE_BUSINESS_ID
+  ruleTypeOfBusiness:
+                responses:
+                  400:
+                    body:
+                      application/json:
+                        type: types.errorResponse
+                        examples:
+                          ruleTypeOfBusiness:
+                            description: A type of business was not provided
+                            value:
+                              code: RULE_TYPE_OF_BUSINESS
+  notFoundIncomeSource:
+                responses:
+                  404:
+                    body:
+                      application/json:
+                        type: types.errorResponse
+                        examples:
+                          notFoundIncomeSource:
+                            description: The supplied income source could not be found
+                            value:
+                              code: MATCHING_RESOURCE_NOT_FOUND
 
 
