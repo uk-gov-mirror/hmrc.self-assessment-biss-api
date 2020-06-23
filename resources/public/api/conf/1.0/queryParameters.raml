@@ -7,7 +7,7 @@ traits:
   taxYear:
     queryParameters:
       taxYear:
-        description: 'The tax year to which the data applies in the format YYYY-YY. If no tax year is supplied the default is the current tax year.'
+        description: 'The tax year to which the data applies in the format YYYY-YY. If no tax year is supplied the default is the current tax year. The earliest permitted tax year is 2019-20.'
         example: "2019-20"
         required: false
   selfEmploymentId:
@@ -19,5 +19,16 @@ traits:
   typeOfBusiness:
     queryParameters:
       typeOfBusiness:
-        description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`uk-property-non-fhl`<br>`uk-property-fhl`"
+        description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`uk-property-non-fhl`<br>`uk-prop erty-fhl`"
+        required: true
+  businessId:
+    queryParameters:
+      businessId:
+        description: "An identifier for the foreign property business, unique to the customer. Must conform to the regular expression`^X[A-Z0-9]{1}IS[0-9]{11}$`"
+        example: "XAIS12345678910"
+        required: true
+  foreignTypeOfBusiness:
+    queryParameters:
+      typeOfBusiness:
+        description: "The type of business the summary calculation is for.<br><br>Limited to the following values: <br>`foreign-property-fhl-eea`<br>`foreign-property`"
         required: true
