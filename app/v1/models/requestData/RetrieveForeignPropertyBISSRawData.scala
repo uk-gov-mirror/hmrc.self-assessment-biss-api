@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package v1.models.des
+package v1.models.requestData
 
-import play.api.libs.json._
-import utils.enums.Enums
+case class RetrieveForeignPropertyBISSRawData(nino: String, businessId: Option[String], typeOfBusiness: Option[String], taxYear: Option[String]) extends RawData
 
-sealed trait IncomeSourceType
 
-object IncomeSourceType {
-  case object `uk-property` extends IncomeSourceType
-
-  case object `fhl-property-uk` extends IncomeSourceType
-
-  case object `foreign-property-fhl-eea` extends IncomeSourceType
-
-  case object `foreign-property` extends IncomeSourceType
-
-  implicit val format: Format[IncomeSourceType] = Enums.format[IncomeSourceType]
-}
