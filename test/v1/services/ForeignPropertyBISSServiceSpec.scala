@@ -89,10 +89,11 @@ class ForeignPropertyBISSServiceSpec extends UnitSpec {
 
       val input = Seq(
         ("INVALID_IDVALUE", NinoFormatError),
-        ("INVALID_INCOMESOURCETYPE", TypeOfBusinessFormatError),
+        ("INVALID_TAXYEAR", TaxYearFormatError),
+        ("INVALID_INCOMESOURCEID", BusinessIdFormatError),
         ("NOT_FOUND", NotFoundError),
         ("INVALID_IDTYPE", DownstreamError),
-        ("INVALID_INCOMESOURCEID", DownstreamError),
+        ("INVALID_INCOMESOURCETYPE", TypeOfBusinessFormatError),
         ("SERVER_ERROR", DownstreamError),
         ("SERVICE_UNAVAILABLE", DownstreamError)
       )

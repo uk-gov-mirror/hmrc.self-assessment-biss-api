@@ -21,12 +21,12 @@ import cats.implicits._
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.{ForeignPropertyBISSConnector, UKPropertyBISSConnector}
+import v1.connectors.{ForeignPropertyBISSConnector}
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.{RetrieveForeignPropertyBISSRequest, RetrieveUKPropertyBISSRequest}
-import v1.models.response.{RetrieveForeignPropertyBISSResponse, RetrieveUKPropertyBISSResponse}
+import v1.models.requestData.{RetrieveForeignPropertyBISSRequest}
+import v1.models.response.{RetrieveForeignPropertyBISSResponse}
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -48,7 +48,7 @@ import scala.concurrent.{ExecutionContext, Future}
     private def mappingDesToMtdError: Map[String, MtdError] = Map(
       "INVALID_IDVALUE" -> NinoFormatError,
       "INVALID_TAXYEAR" -> TaxYearFormatError,
-      "INVALID_INCOMESOURCEID" -> DownstreamError,
+      "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
       "NOT_FOUND" -> NotFoundError,
       "INVALID_IDTYPE" -> DownstreamError,
       "INVALID_INCOMESOURCETYPE" -> TypeOfBusinessFormatError,
