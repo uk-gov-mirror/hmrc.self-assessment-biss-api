@@ -25,7 +25,8 @@ object ForeignTypeOfBusinessValidation {
 
   def validate(typeOfBusiness: Option[String]): List[MtdError] =
     typeOfBusiness match {
-      case Some(i) => if (i == foreignPropertyFhlEea || i == foreignProperty) List() else List(TypeOfBusinessFormatError)
+      case Some(i) if (i == foreignPropertyFhlEea || i == foreignProperty) => NoValidationErrors
+      case Some(_) => List(TypeOfBusinessFormatError)
       case None => List(RuleTypeOfBusinessError)
     }
 }

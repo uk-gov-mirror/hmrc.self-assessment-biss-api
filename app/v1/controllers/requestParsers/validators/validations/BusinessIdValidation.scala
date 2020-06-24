@@ -16,13 +16,15 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.{BusinessIdFormatError, MtdError}
+import v1.models.errors.{BusinessIdFormatError, MtdError, RuleForeignBusinessIdError}
 
 object BusinessIdValidation {
 
   private val regex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
 
-  def validate(businessId: String): List[MtdError] =
-    if(businessId.matches(regex)) List() else List(BusinessIdFormatError)
+  def validate(businessId: Option[String]): List[MtdError] = businessId match {
+    case Some(i) => if(i.matches(regex)) NoValidationErrors else List(BusinessIdFormatError)
+    case None => List(RuleForeignBusinessIdError)
+  }
 
 }

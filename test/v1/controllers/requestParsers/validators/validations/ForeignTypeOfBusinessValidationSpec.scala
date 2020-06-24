@@ -39,7 +39,7 @@ class ForeignTypeOfBusinessValidationSpec extends UnitSpec {
     }
 
     "return a rule type of business error" when {
-      "no tyoe of business is provided" in {
+      "no type of business is provided" in {
         ForeignTypeOfBusinessValidation.validate(noTypeOfBusiness) shouldBe List(RuleTypeOfBusinessError)
       }
     }

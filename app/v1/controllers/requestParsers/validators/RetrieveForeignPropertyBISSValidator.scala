@@ -16,19 +16,23 @@
 
 package v1.controllers.requestParsers.validators
 
-import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, ForeignTypeOfBusinessValidation, NinoValidation, TaxYearValidation}
-import v1.models.errors.MtdError
+import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, ForeignTypeOfBusinessValidation, MtdTaxYearValidation, NinoValidation, TaxYearValidation}
+import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import v1.models.requestData.RetrieveForeignPropertyBISSRawData
 
 class RetrieveForeignPropertyBISSValidator extends Validator[RetrieveForeignPropertyBISSRawData]{
 
-  private val validationSet = List(parameterFormatValidation)
+  private val validationSet = List(parameterFormatValidation, businessRuleValidation)
 
   private def parameterFormatValidation : RetrieveForeignPropertyBISSRawData => List[List[MtdError]] = (data: RetrieveForeignPropertyBISSRawData) => List(
     NinoValidation.validate(data.nino),
     data.taxYear.map(TaxYearValidation.validate).getOrElse(Nil),
-    BusinessIdValidation.validate(data.businessId.get),
+    BusinessIdValidation.validate(data.businessId),
     ForeignTypeOfBusinessValidation.validate(data.typeOfBusiness)
+  )
+
+  private def businessRuleValidation : RetrieveForeignPropertyBISSRawData => List[List[MtdError]] = (data: RetrieveForeignPropertyBISSRawData) => List(
+    data.taxYear.map(MtdTaxYearValidation.validate(_, RuleTaxYearNotSupportedError)).getOrElse(Nil)
   )
 
   override def validate(data: RetrieveForeignPropertyBISSRawData): List[MtdError] = run(validationSet, data).distinct
