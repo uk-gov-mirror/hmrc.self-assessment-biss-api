@@ -17,7 +17,6 @@
 package v1.services
 
 import support.UnitSpec
-import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockForeignPropertyBISSConnector
@@ -25,7 +24,7 @@ import v1.models.des.IncomeSourceType
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.{DesTaxYear, RetrieveForeignPropertyBISSRequest}
-import v1.models.response.{RetrieveForeignPropertyBISSResponse}
+import v1.models.response.RetrieveForeignPropertyBISSResponse
 import v1.models.response.common.{Loss, Profit, Total}
 
 import scala.concurrent.ExecutionContext.Implicits.global

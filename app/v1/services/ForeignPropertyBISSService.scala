@@ -21,12 +21,12 @@ import cats.implicits._
 import cats.data.EitherT
 import uk.gov.hmrc.http.HeaderCarrier
 import utils.Logging
-import v1.connectors.{ForeignPropertyBISSConnector}
+import v1.connectors.ForeignPropertyBISSConnector
 import v1.controllers.EndpointLogContext
 import v1.models.errors._
 import v1.models.outcomes.ResponseWrapper
-import v1.models.requestData.{RetrieveForeignPropertyBISSRequest}
-import v1.models.response.{RetrieveForeignPropertyBISSResponse}
+import v1.models.requestData.RetrieveForeignPropertyBISSRequest
+import v1.models.response.RetrieveForeignPropertyBISSResponse
 import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
