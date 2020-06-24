@@ -16,6 +16,7 @@
 
 package v1.models.requestData
 
+import uk.gov.hmrc.domain.Nino
 import v1.models.des.IncomeSourceType
 
-case class RetrieveForeignPropertyBISSRequest(nino: String, businessId: String, typeOfBusiness: IncomeSourceType, taxYear: DesTaxYear)
+case class RetrieveForeignPropertyBISSRequest(nino: Nino, businessId: String, typeOfBusiness: IncomeSourceType, taxYear: DesTaxYear)
