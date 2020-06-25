@@ -23,12 +23,10 @@ import v1.models.requestData.DesTaxYear
 object MtdTaxYearValidation extends FixedConfig {
 
   // @param taxYear In format YYYY-YY
-  def validate(taxYear: String, minTaxYear: Option[Int],  error: MtdError): List[MtdError] = {
-
-    val paramTaxYear = minTaxYear getOrElse minimumTaxYear
+  def validate(taxYear: String, minTaxYear: Int,  error: MtdError): List[MtdError] = {
 
     val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
 
-    if (desTaxYear >= paramTaxYear) NoValidationErrors else List(error)
+    if (desTaxYear >= minTaxYear) NoValidationErrors else List(error)
   }
 }

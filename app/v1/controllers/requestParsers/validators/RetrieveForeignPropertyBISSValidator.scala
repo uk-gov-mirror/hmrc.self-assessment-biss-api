@@ -33,7 +33,7 @@ class RetrieveForeignPropertyBISSValidator extends Validator[RetrieveForeignProp
   )
 
   private def businessRuleValidation : RetrieveForeignPropertyBISSRawData => List[List[MtdError]] = (data: RetrieveForeignPropertyBISSRawData) => List(
-    data.taxYear.map(MtdTaxYearValidation.validate(_,Some(foreignPropertyMinTaxYear), RuleTaxYearNotSupportedError)).getOrElse(Nil)
+    data.taxYear.map(MtdTaxYearValidation.validate(_,foreignPropertyMinTaxYear, RuleTaxYearNotSupportedError)).getOrElse(Nil)
   )
 
   override def validate(data: RetrieveForeignPropertyBISSRawData): List[MtdError] = run(validationSet, data).distinct
