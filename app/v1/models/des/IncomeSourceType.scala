@@ -26,7 +26,7 @@ object IncomeSourceType {
 
   case object `fhl-property-uk` extends IncomeSourceType
 
-  case object `foreign-property-fhl-eea` extends IncomeSourceType
+  case object `fhl-property-eea` extends IncomeSourceType
 
   case object `foreign-property` extends IncomeSourceType
 

@@ -33,7 +33,7 @@ extends RequestParser[RetrieveForeignPropertyBISSRawData, RetrieveForeignPropert
      data.businessId.get,
      (data.typeOfBusiness: @unchecked) match {
        case Some("foreign-property") => IncomeSourceType.`foreign-property`
-       case Some("fhl-property-eea") =>  IncomeSourceType.`foreign-property-fhl-eea`
+       case Some("foreign-property-fhl-eea") =>  IncomeSourceType.`fhl-property-eea`
      },
      data.taxYear.fold(DateUtils.getDesTaxYear(LocalDate.now()))(DateUtils.getDesTaxYear))
   }
