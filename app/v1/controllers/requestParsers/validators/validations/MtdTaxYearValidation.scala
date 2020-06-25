@@ -20,7 +20,7 @@ import config.FixedConfig
 import v1.models.errors.MtdError
 import v1.models.requestData.DesTaxYear
 
-object MtdTaxYearValidation extends FixedConfig {
+object MtdTaxYearValidation  {
 
   // @param taxYear In format YYYY-YY
   def validate(taxYear: String, minTaxYear: Int,  error: MtdError): List[MtdError] = {
