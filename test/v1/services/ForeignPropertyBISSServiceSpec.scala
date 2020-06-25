@@ -17,6 +17,7 @@
 package v1.services
 
 import support.UnitSpec
+import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
 import v1.mocks.connectors.MockForeignPropertyBISSConnector
@@ -32,7 +33,7 @@ import scala.concurrent.Future
 
 
 class ForeignPropertyBISSServiceSpec extends UnitSpec {
-  private val nino = "AA123456A"
+  private val nino = Nino("AA123456A")
   private val taxYear = "2019"
   private val correlationId = "X-123"
   private val businessId = "XAIS12345678910"
