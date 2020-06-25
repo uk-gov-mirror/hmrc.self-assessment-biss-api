@@ -16,11 +16,12 @@
 
 package v1.controllers.requestParsers.validators
 
+import config.FixedConfig
 import v1.controllers.requestParsers.validators.validations.{BusinessIdValidation, ForeignTypeOfBusinessValidation, MtdTaxYearValidation, NinoValidation, TaxYearValidation}
 import v1.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import v1.models.requestData.RetrieveForeignPropertyBISSRawData
 
-class RetrieveForeignPropertyBISSValidator extends Validator[RetrieveForeignPropertyBISSRawData]{
+class RetrieveForeignPropertyBISSValidator extends Validator[RetrieveForeignPropertyBISSRawData] with FixedConfig{
 
   private val validationSet = List(parameterFormatValidation, businessRuleValidation)
 
@@ -32,7 +33,7 @@ class RetrieveForeignPropertyBISSValidator extends Validator[RetrieveForeignProp
   )
 
   private def businessRuleValidation : RetrieveForeignPropertyBISSRawData => List[List[MtdError]] = (data: RetrieveForeignPropertyBISSRawData) => List(
-    data.taxYear.map(MtdTaxYearValidation.validate(_, RuleTaxYearNotSupportedError)).getOrElse(Nil)
+    data.taxYear.map(MtdTaxYearValidation.validate(_,foreignPropertyMinTaxYear, RuleTaxYearNotSupportedError)).getOrElse(Nil)
   )
 
   override def validate(data: RetrieveForeignPropertyBISSRawData): List[MtdError] = run(validationSet, data).distinct
