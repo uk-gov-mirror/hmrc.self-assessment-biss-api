@@ -26,7 +26,7 @@ class RetrieveForeignPropertyBISSValidatorSpec extends UnitSpec{
   private val invalidNino = "~~~~~~~~~"
   private val businessId = "XAIS12345678901"
   private val validTypeOfBusiness = "foreign-property-fhl-eea"
-  private val taxYear = "2018-19"
+  private val taxYear = "2019-20"
   private val invalidTaxYear = "2018-28"
   private val invalidTypeOfBusiness = "dog food shop"
   private val noTypeOfBusiness = None
