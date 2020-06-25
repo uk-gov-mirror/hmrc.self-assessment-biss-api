@@ -21,6 +21,7 @@ import java.time.LocalDate
 import javax.inject.Inject
 import uk.gov.hmrc.domain.Nino
 import utils.DateUtils
+import v1.controllers.requestParsers.validators.RetrieveForeignPropertyBISSValidator
 import v1.models.des.IncomeSourceType
 import v1.models.requestData.{RetrieveForeignPropertyBISSRawData, RetrieveForeignPropertyBISSRequest}
 
