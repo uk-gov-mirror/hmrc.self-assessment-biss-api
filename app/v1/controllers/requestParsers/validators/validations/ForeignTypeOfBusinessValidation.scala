@@ -16,16 +16,17 @@
 
 package v1.controllers.requestParsers.validators.validations
 
-import v1.models.errors.MtdError
-import v1.models.requestData.DesTaxYear
+import v1.models.errors.{MtdError, RuleTypeOfBusinessError, TypeOfBusinessFormatError}
 
-object MtdTaxYearValidation  {
+object ForeignTypeOfBusinessValidation {
 
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String, minTaxYear: Int,  error: MtdError): List[MtdError] = {
+  val foreignPropertyFhlEea = "foreign-property-fhl-eea"
+  val foreignProperty = "foreign-property"
 
-    val desTaxYear = Integer.parseInt(DesTaxYear.fromMtd(taxYear).value)
-
-    if (desTaxYear >= minTaxYear) NoValidationErrors else List(error)
-  }
+  def validate(typeOfBusiness: Option[String]): List[MtdError] =
+    typeOfBusiness match {
+      case Some(i) if (i == foreignPropertyFhlEea || i == foreignProperty) => NoValidationErrors
+      case Some(_) => List(TypeOfBusinessFormatError)
+      case None => List(RuleTypeOfBusinessError)
+    }
 }

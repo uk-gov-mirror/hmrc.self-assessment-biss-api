@@ -33,6 +33,7 @@ object SelfEmploymentIdFormatError extends MtdError("FORMAT_SELF_EMPLOYMENT_ID",
 object TypeOfBusinessFormatError extends MtdError("FORMAT_TYPE_OF_BUSINESS", "The provided type of business is invalid")
 
 object BusinessIdFormatError extends MtdError("FORMAT_BUSINESS_ID","The provided Business ID is invalid")
+
 // Rule Errors
 object RuleTaxYearNotSupportedError
   extends MtdError("RULE_TAX_YEAR_NOT_SUPPORTED", "Tax year not supported, because it precedes the earliest allowable tax year")
@@ -40,13 +41,16 @@ object RuleTaxYearNotSupportedError
 object RuleIncorrectOrEmptyBodyError extends MtdError("RULE_INCORRECT_OR_EMPTY_BODY_SUBMITTED", "An empty or non-matching body was submitted")
 
 object RuleTaxYearRangeInvalidError
-  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range exceeded. A tax year range of one year is required")
+  extends MtdError("RULE_TAX_YEAR_RANGE_INVALID", "Tax year range invalid. A tax year range of one year is required")
 
 object RuleSelfEmploymentIdError
   extends MtdError("RULE_SELF_EMPLOYMENT_ID", "A self-employment ID must be supplied for a self-employment business")
 
 object RuleTypeOfBusinessError
   extends MtdError("RULE_TYPE_OF_BUSINESS", "A type of business must be supplied")
+
+object RuleForeignBusinessIdError
+  extends MtdError("RULE_BUSINESS_ID","A Business ID must be supplied for a foreign property business")
 
 //Standard Errors
 object NotFoundError extends MtdError("MATCHING_RESOURCE_NOT_FOUND", "Matching resource not found")
