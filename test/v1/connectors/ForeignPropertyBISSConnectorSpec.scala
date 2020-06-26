@@ -17,6 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
+import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.des.IncomeSourceType
 import v1.models.outcomes.ResponseWrapper
@@ -29,7 +30,7 @@ import scala.concurrent.Future
 class ForeignPropertyBISSConnectorSpec extends ConnectorSpec {
 
   val desTaxYear = DesTaxYear("2019")
-  val nino = "AA123456A"
+  val nino = Nino("AA123456A")
   val incomeSourceId = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
   val businessId = "XAIS12345678910"
 
