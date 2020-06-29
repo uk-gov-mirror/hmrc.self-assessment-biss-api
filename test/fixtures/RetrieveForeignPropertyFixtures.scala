@@ -42,6 +42,18 @@ object RetrieveForeignPropertyFixtures {
       |}
     """.stripMargin)
 
+  val mtdResponseWithOnlyRequiredData: JsValue = Json.parse(
+    """
+      |{
+      |  "total": {
+      |    "income": 100.00,
+      |    "expenses": 50.00,
+      |    "additions": 5.00,
+      |    "deductions": 60.00
+      |  }
+      |}
+    """.stripMargin)
+
   val desResponse: JsValue = Json.parse(
     """
       |{

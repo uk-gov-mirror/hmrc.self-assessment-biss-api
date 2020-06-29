@@ -65,8 +65,8 @@ class RetrieveForeignPropertyBISSControllerSpec
       ))
     )
 
-  private val rawData = RetrieveForeignPropertyBISSRawData(nino, businessId, taxYear, typeOfBusiness)
-  private val rawDataTwo = RetrieveForeignPropertyBISSRawData(nino, businessId, taxYear, secondTypeOfBusiness)
+  private val rawData = RetrieveForeignPropertyBISSRawData(nino, businessId, typeOfBusiness, taxYear)
+  private val rawDataTwo = RetrieveForeignPropertyBISSRawData(nino, businessId, secondTypeOfBusiness, taxYear)
   private val requestData = RetrieveForeignPropertyBISSRequest(Nino(nino), businessId.get, IncomeSourceType.`uk-property`, DesTaxYear("2019"))
   private val requestDataTwo = RetrieveForeignPropertyBISSRequest(Nino(nino), businessId.get, IncomeSourceType.`fhl-property-uk` ,DesTaxYear("2019"))
 

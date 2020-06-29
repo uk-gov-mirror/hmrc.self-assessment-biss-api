@@ -19,7 +19,7 @@ package v1.endpoints
 import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import fixtures.RetrieveUKPropertyFixture._
+import fixtures.RetrieveForeignPropertyFixtures._
 import play.api.http.HeaderNames.ACCEPT
 import play.api.http.Status._
 import play.api.libs.json.Json
@@ -36,15 +36,14 @@ class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear: Option[String] = Some("2018-19")
-    val typeOfBusiness: Option[String] = Some("foreign-property-fhl-eea")
-    val correlationId = "X-123"
-    val desTaxYear: DesTaxYear = DesTaxYear("2019")
+    val taxYear: Option[String] = Some("2019-20")
+    val typeOfBusiness: Option[String] = Some("foreign-property")
+    val desTaxYear: DesTaxYear = DesTaxYear("2020")
     val businessId= "XAIS12345678910"
 
     def uri: String = s"/$nino/foreign-property"
 
-    def desUrl: String = s"/income-tax/income-sources/nino/$nino/foreign-property-fhl-eea/${desTaxYear.toString}/biss?incomesourceid=$businessId"
+    def desUrl: String = s"/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss"
 
     def setupStubs(): StubMapping
 
@@ -74,9 +73,8 @@ class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId),  OK, desResponse)
         }
-
         val response: WSResponse = await(request.get)
 
         response.status shouldBe OK
@@ -93,7 +91,7 @@ class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId), OK, desResponse)
         }
 
         val response: WSResponse = await(request.get)
@@ -111,7 +109,7 @@ class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponseWithOnlyRequiredData)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId), OK, desResponseWithOnlyRequiredData)
         }
 
         val response: WSResponse = await(request.get)
@@ -181,7 +179,7 @@ class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
       val input = Seq(
         (BAD_REQUEST, "INVALID_IDVALUE", BAD_REQUEST, NinoFormatError),
         (BAD_REQUEST, "INVALID_IDTYPE", INTERNAL_SERVER_ERROR, DownstreamError),
-        (BAD_REQUEST, "INVALID_INCOMESOURCEID", INTERNAL_SERVER_ERROR, DownstreamError),
+        (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCETYPE", BAD_REQUEST, TypeOfBusinessFormatError),
         (BAD_REQUEST, "NOT_FOUND", NOT_FOUND, NotFoundError),

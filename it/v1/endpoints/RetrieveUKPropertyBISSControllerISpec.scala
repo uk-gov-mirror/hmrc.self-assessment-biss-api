@@ -75,7 +75,6 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
           MtdIdLookupStub.ninoFound(nino)
           DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponse)
         }
-
         val response: WSResponse = await(request.get)
 
         response.status shouldBe OK

@@ -50,7 +50,7 @@ class RetrieveForeignPropertyBISSController @Inject()(
 
   def retrieveBiss(nino: String, businessId: Option[String], taxYear: Option[String], typeOfBusiness: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
-      val rawData = RetrieveForeignPropertyBISSRawData(nino, businessId, taxYear, typeOfBusiness)
+      val rawData = RetrieveForeignPropertyBISSRawData(nino, businessId,typeOfBusiness,taxYear)
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
@@ -60,7 +60,6 @@ class RetrieveForeignPropertyBISSController @Inject()(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
               s"Success response received with correlationId: ${response.correlationId}"
           )
-
           Ok(Json.toJson(response.responseData))
             .withApiHeaders(response.correlationId)
             .as(MimeTypes.JSON)
