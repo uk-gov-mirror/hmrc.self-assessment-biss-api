@@ -42,5 +42,6 @@ class ForeignPropertyBISSConnector @Inject()(val http: HttpClient,
     get(
       DesUri[RetrieveForeignPropertyBISSResponse](s"income-tax/income-sources/nino/$nino/$typeOfBusiness/$taxYear/biss?incomesourceid=$businessId")
     )
+
   }
 }

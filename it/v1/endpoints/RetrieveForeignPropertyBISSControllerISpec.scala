@@ -19,40 +19,40 @@ package v1.endpoints
 import java.time.LocalDate
 
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
-import fixtures.RetrieveUKPropertyFixture._
+import fixtures.RetrieveForeignPropertyFixtures._
 import play.api.http.HeaderNames.ACCEPT
-import play.api.http.Status.{BAD_REQUEST, INTERNAL_SERVER_ERROR, NOT_FOUND, OK, SERVICE_UNAVAILABLE}
+import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
 import support.IntegrationBaseSpec
 import utils.DateUtils
-import v1.models.errors.{DownstreamError, MtdError, NinoFormatError, NotFoundError, RuleTypeOfBusinessError, TaxYearFormatError, TypeOfBusinessFormatError}
+import v1.models.errors._
 import v1.models.requestData.DesTaxYear
 import v1.stubs.{AuditStub, AuthStub, DesStub, MtdIdLookupStub}
 
-class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
+class RetrieveForeignPropertyBISSControllerISpec extends IntegrationBaseSpec {
 
 
   private trait Test {
 
     val nino = "AA123456A"
-    val taxYear: Option[String] = Some("2018-19")
-    val typeOfBusiness: Option[String] = Some("uk-property-non-fhl")
-    val correlationId = "X-123"
-    val desTaxYear: DesTaxYear = DesTaxYear("2019")
+    val taxYear: Option[String] = Some("2019-20")
+    val typeOfBusiness: Option[String] = Some("foreign-property")
+    val desTaxYear: DesTaxYear = DesTaxYear("2020")
+    val businessId= "XAIS12345678910"
 
-    def uri: String = s"/$nino/uk-property"
+    def uri: String = s"/$nino/foreign-property"
 
-    def desUrl: String = s"/income-tax/income-sources/nino/$nino/uk-property/${desTaxYear.toString}/biss"
+    def desUrl: String = s"/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss"
 
     def setupStubs(): StubMapping
 
     def request: WSRequest = {
-      val queryParams: Seq[(String, String)] = (taxYear, typeOfBusiness) match {
-        case (Some(x), Some(y)) => Seq("taxYear" -> x, "typeOfBusiness" -> y)
-        case (None,Some(y)) => Seq("typeOfBusiness" -> y)
-        case (Some(x), None) => Seq("taxYear" -> x)
-        case (None, None) => Seq()
+      val queryParams: Seq[(String, String)] = (taxYear, typeOfBusiness, businessId) match {
+        case (Some(x), Some(y), z) => Seq("taxYear" -> x, "typeOfBusiness" -> y, "businessId" -> z)
+        case (None, Some(y), z) => Seq("typeOfBusiness" -> y, "businessId" -> z)
+        case (Some(x), None, z) => Seq("taxYear" -> x, "businessId" -> z)
+        case (None, None, z) => Seq("businessId" -> z)
       }
 
 
@@ -63,7 +63,7 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
     }
   }
 
-  "Calling the retrieve UK property BISS endpoint" should {
+  "Calling the retrieve foreign property BISS endpoint" should {
 
     "return a valid response with status OK" when {
 
@@ -73,7 +73,7 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId),  OK, desResponse)
         }
         val response: WSResponse = await(request.get)
 
@@ -91,7 +91,7 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponse)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId), OK, desResponse)
         }
 
         val response: WSResponse = await(request.get)
@@ -109,7 +109,7 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
           AuditStub.audit()
           AuthStub.authorised()
           MtdIdLookupStub.ninoFound(nino)
-          DesStub.onSuccess(DesStub.GET, desUrl, Map(), OK, desResponseWithOnlyRequiredData)
+          DesStub.onSuccess(DesStub.GET, desUrl, Map("incomesourceid" -> businessId), OK, desResponseWithOnlyRequiredData)
         }
 
         val response: WSResponse = await(request.get)
@@ -142,8 +142,8 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
       }
 
       val input = Seq(
-        ("AA1123A", None, Some("uk-property-non-fhl"), BAD_REQUEST, NinoFormatError),
-        ("AA123456A", Some("20177"), Some("uk-property-fhl"), BAD_REQUEST, TaxYearFormatError),
+        ("AA1123A", None, Some("foreign-property-fhl-eea"), BAD_REQUEST, NinoFormatError),
+        ("AA123456A", Some("20177"), Some("foreign-property-fhl-eea"), BAD_REQUEST, TaxYearFormatError),
         ("AA123456A", Some("2018-19"), Some("123456789"), BAD_REQUEST, TypeOfBusinessFormatError),
         ("AA123456A", Some("2018-19"), None, BAD_REQUEST, RuleTypeOfBusinessError)
       )
@@ -178,10 +178,10 @@ class RetrieveUKPropertyBISSControllerISpec extends IntegrationBaseSpec {
 
       val input = Seq(
         (BAD_REQUEST, "INVALID_IDVALUE", BAD_REQUEST, NinoFormatError),
+        (BAD_REQUEST, "INVALID_IDTYPE", INTERNAL_SERVER_ERROR, DownstreamError),
+        (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
         (BAD_REQUEST, "INVALID_TAXYEAR", BAD_REQUEST, TaxYearFormatError),
         (BAD_REQUEST, "INVALID_INCOMESOURCETYPE", BAD_REQUEST, TypeOfBusinessFormatError),
-        (BAD_REQUEST, "INVALID_IDTYPE", INTERNAL_SERVER_ERROR, DownstreamError),
-        (BAD_REQUEST, "INVALID_INCOMESOURCEID", INTERNAL_SERVER_ERROR, DownstreamError),
         (BAD_REQUEST, "NOT_FOUND", NOT_FOUND, NotFoundError),
         (INTERNAL_SERVER_ERROR, "SERVER_ERROR", INTERNAL_SERVER_ERROR, DownstreamError),
         (SERVICE_UNAVAILABLE, "SERVICE_UNAVAILABLE", INTERNAL_SERVER_ERROR, DownstreamError),
