@@ -16,7 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
@@ -26,15 +25,13 @@ import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.{DesTaxYear, RetrieveSelfEmploymentBISSRequest}
 import fixtures.RetrieveSelfEmploymentBISSFixture._
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-class SelfEmploymentBISSServiceSpec extends UnitSpec {
+class SelfEmploymentBISSServiceSpec extends ServiceSpec {
 
   private val nino = "AA123456A"
   private val taxYear = "2019"
   private val selfEmploymentId = "123456789"
-  private val correlationId = "X-123"
 
   private val requestData = RetrieveSelfEmploymentBISSRequest(Nino(nino), DesTaxYear(taxYear), selfEmploymentId)
 
@@ -63,7 +60,7 @@ class SelfEmploymentBISSServiceSpec extends UnitSpec {
           MockSelfEmploymentBISSConnector.retrieveBiss(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.retrieveBiss(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.retrieveBiss(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

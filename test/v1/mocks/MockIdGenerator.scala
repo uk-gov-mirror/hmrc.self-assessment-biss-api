@@ -14,25 +14,17 @@
  * limitations under the License.
  */
 
-package v1.controllers
+package v1.mocks
 
-import play.api.mvc.Result
-import utils.Logging
+import org.scalamock.handlers.CallHandler
+import org.scalamock.scalatest.MockFactory
+import utils.IdGenerator
 
-trait BaseController {
-  self: Logging =>
+trait MockIdGenerator extends MockFactory {
 
-  implicit class Response(result: Result) {
+  val mockIdGenerator: IdGenerator = mock[IdGenerator]
 
-    def withApiHeaders(correlationId: String, responseHeaders: (String, String)*): Result = {
-
-      val newHeaders: Seq[(String, String)] = responseHeaders ++ Seq(
-        "X-CorrelationId" -> correlationId,
-        "X-Content-Type-Options" -> "nosniff",
-        "Content-Type" -> "application/json"
-      )
-
-      result.copy(header = result.header.copy(headers = result.header.headers ++ newHeaders))
-    }
+  object MockIdGenerator {
+    def generateCorrelationId: CallHandler[String] = (mockIdGenerator.generateCorrelationId _).expects()
   }
 }

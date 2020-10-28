@@ -33,8 +33,8 @@ trait MockUKPropertyBISSConnector extends MockFactory {
 
     def retrieveBiss(requestData: RetrieveUKPropertyBISSRequest): CallHandler[Future[DesOutcome[RetrieveUKPropertyBISSResponse]]] = {
       (mockConnector
-        .retrieveBiss(_: RetrieveUKPropertyBISSRequest)(_: HeaderCarrier, _: ExecutionContext))
-        .expects(requestData, *, *)
+        .retrieveBiss(_: RetrieveUKPropertyBISSRequest)(_: HeaderCarrier, _: ExecutionContext, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 

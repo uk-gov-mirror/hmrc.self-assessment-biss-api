@@ -32,6 +32,7 @@ class RetrieveUKPropertyBISSRequestParserSpec extends UnitSpec {
   private val taxYear = "2018-19"
   private val typeOfBusinessNonFhl = Some("uk-property-non-fhl")
   private val typeOfBusinessFhl = Some("uk-property-fhl")
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val inputData = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessNonFhl)
   private val inputDataTwo = RetrieveUKPropertyBISSRawData(nino, Some(taxYear), typeOfBusinessFhl)
@@ -65,13 +66,13 @@ class RetrieveUKPropertyBISSRequestParserSpec extends UnitSpec {
       "a single error is found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, NinoFormatError))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "a multiple errors are found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError, TaxYearFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

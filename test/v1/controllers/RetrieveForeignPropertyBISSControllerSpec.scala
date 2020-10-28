@@ -21,6 +21,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockRetrieveForeignPropertyBISSRequestDataParser
 import v1.mocks.services.{MockEnrolmentsAuthService, MockForeignPropertyBISSService, MockMtdIdLookupService}
 import v1.models.des.IncomeSourceType
@@ -38,32 +39,32 @@ class RetrieveForeignPropertyBISSControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveForeignPropertyBISSRequestDataParser
-    with MockForeignPropertyBISSService {
+    with MockForeignPropertyBISSService
+    with MockIdGenerator {
 
   private val nino = "AA123456A"
   private val businessId = Some("")
-  private val taxYear =  Some("2018-19")
+  private val taxYear = Some("2018-19")
   private val typeOfBusiness = Some("foreign-property-fhl-eea")
   private val secondTypeOfBusiness = Some("foreign-property")
   private val correlationId = "X-123"
 
-  val response: RetrieveForeignPropertyBISSResponse =
-    RetrieveForeignPropertyBISSResponse (
-      Total(
-        income = 100.00,
-        expenses = Some(50.00),
-        additions = Some(5.00),
-        deductions = Some(60.00)
-      ),
-      Some(Profit(
-        net = Some(20.00),
-        taxable = Some(10.00)
-      )),
-      Some(Loss(
-        net = Some(10.00),
-        taxable = Some(35.00)
-      ))
-    )
+  val response: RetrieveForeignPropertyBISSResponse = RetrieveForeignPropertyBISSResponse (
+    Total(
+      income = 100.00,
+      expenses = Some(50.00),
+      additions = Some(5.00),
+      deductions = Some(60.00)
+    ),
+    Some(Profit(
+      net = Some(20.00),
+      taxable = Some(10.00)
+    )),
+    Some(Loss(
+      net = Some(10.00),
+      taxable = Some(35.00)
+    ))
+  )
 
   private val rawData = RetrieveForeignPropertyBISSRawData(nino, businessId, typeOfBusiness, taxYear)
   private val rawDataTwo = RetrieveForeignPropertyBISSRawData(nino, businessId, secondTypeOfBusiness, taxYear)
@@ -78,11 +79,13 @@ class RetrieveForeignPropertyBISSControllerSpec
       lookupService = mockMtdIdLookupService,
       requestParser = mockRequestParser,
       foreignPropertyBISSService = mockService,
-      cc =  cc
+      cc =  cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.generateCorrelationId.returns(correlationId)
   }
 
   "retrieveBiss" should {
@@ -131,7 +134,7 @@ class RetrieveForeignPropertyBISSControllerSpec
 
             MockRetrieveForeignPropertyBISSRequestDataParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.retrieveBiss(nino, businessId, taxYear,  typeOfBusiness)(fakeGetRequest)
 
@@ -167,7 +170,7 @@ class RetrieveForeignPropertyBISSControllerSpec
 
             MockForeignPropertyBISSService
               .retrieveBiss(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.retrieveBiss(nino, businessId, taxYear, typeOfBusiness)(fakeGetRequest)
 

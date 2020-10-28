@@ -31,21 +31,25 @@ import v1.support.DesResponseMappingSupport
 
 import scala.concurrent.{ExecutionContext, Future}
 
-  @Singleton
-  class ForeignPropertyBISSService @Inject()(connector: ForeignPropertyBISSConnector) extends DesResponseMappingSupport with Logging {
+@Singleton
+class ForeignPropertyBISSService @Inject()(connector: ForeignPropertyBISSConnector)
+  extends DesResponseMappingSupport with Logging {
 
-    def retrieveBiss(request: RetrieveForeignPropertyBISSRequest)
-                    (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
-    Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyBISSResponse]]] = {
+  def retrieveBiss(request: RetrieveForeignPropertyBISSRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext,
+    logContext: EndpointLogContext,
+    correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyBISSResponse]]] = {
 
-      val result = for {
-        desResponseWrapper <- EitherT(connector.retrieveBiss(request)).leftMap(mapDesErrors(mappingDesToMtdError))
-      } yield desResponseWrapper.map(des => des)
+    val result = for {
+      desResponseWrapper <- EitherT(connector.retrieveBiss(request)).leftMap(mapDesErrors(mappingDesToMtdError))
+    } yield desResponseWrapper.map(des => des)
 
-      result.value
-    }
+    result.value
+  }
 
-    private def mappingDesToMtdError: Map[String, MtdError] = Map(
+  private def mappingDesToMtdError: Map[String, MtdError] =
+    Map(
       "INVALID_IDVALUE" -> NinoFormatError,
       "INVALID_TAXYEAR" -> TaxYearFormatError,
       "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
@@ -55,6 +59,4 @@ import scala.concurrent.{ExecutionContext, Future}
       "SERVER_ERROR" -> DownstreamError,
       "SERVICE_UNAVAILABLE" -> DownstreamError
     )
-  }
-
-
+}

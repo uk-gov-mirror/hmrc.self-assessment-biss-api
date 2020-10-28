@@ -20,7 +20,6 @@ import play.api.http.HttpEntity
 import play.api.mvc.{ResponseHeader, Result}
 import support.UnitSpec
 import utils.Logging
-import v1.models.errors.{BadRequestError, ErrorWrapper}
 
 class BaseControllerSpec extends UnitSpec {
 
@@ -29,7 +28,7 @@ class BaseControllerSpec extends UnitSpec {
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "BaseController", endpointName = "beans")
 
-  val result = Result(ResponseHeader(200), HttpEntity.NoEntity)
+  val result: Result = Result(ResponseHeader(200), HttpEntity.NoEntity)
   val correlationId = "X-123"
   val baseHeaders: Map[String, String] = Map("X-CorrelationId" -> correlationId, "X-Content-Type-Options" -> "nosniff", "Content-Type" -> "application/json")
 
@@ -44,31 +43,12 @@ class BaseControllerSpec extends UnitSpec {
         "extra headers are passed in" in new TestController {
           val response = new Response(result)
 
-          val extraHeaders = ("key" -> "value")
+          val extraHeaders: (String, String) = "key" -> "value"
 
           response.withApiHeaders("X-123", extraHeaders) shouldBe result.copy(header = result.header.copy(headers = baseHeaders + extraHeaders))
         }
       }
     }
-    "getCorrelationId is called" should {
-      "return the correlationId" when {
-        "the ErrorWrapper contains a correlationId" in new TestController {
-          val errorWrapper: ErrorWrapper = ErrorWrapper(Some(correlationId), BadRequestError)
-
-          getCorrelationId(errorWrapper) shouldBe correlationId
-        }
-      }
-      "return a new correlationId" when {
-        "the ErrorWrapper does not contain a correlationId" in new TestController {
-          val errorWrapper: ErrorWrapper = ErrorWrapper(None, BadRequestError)
-
-          val correlationIdRegex = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
-
-          getCorrelationId(errorWrapper).matches(correlationIdRegex) shouldBe true
-        }
-      }
-    }
   }
-
 
 }

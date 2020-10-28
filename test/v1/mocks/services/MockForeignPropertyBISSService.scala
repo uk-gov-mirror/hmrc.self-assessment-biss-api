@@ -36,8 +36,9 @@ trait MockForeignPropertyBISSService  extends MockFactory {
 
     def retrieveBiss(requestData: RetrieveForeignPropertyBISSRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveForeignPropertyBISSResponse]]]] = {
       (mockService
-        .retrieveBiss(_: RetrieveForeignPropertyBISSRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .retrieveBiss(_: RetrieveForeignPropertyBISSRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
+
 }

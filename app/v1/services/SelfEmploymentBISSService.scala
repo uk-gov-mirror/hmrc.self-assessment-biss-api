@@ -33,11 +33,14 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class SelfEmploymentBISSService @Inject()(connector: SelfEmploymentBISSConnector) extends DesResponseMappingSupport with Logging{
+class SelfEmploymentBISSService @Inject()(connector: SelfEmploymentBISSConnector)
+  extends DesResponseMappingSupport with Logging{
 
-  def retrieveBiss(request: RetrieveSelfEmploymentBISSRequest)
-                       (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
-  Future[Either[ErrorWrapper, ResponseWrapper[RetrieveSelfEmploymentBISSResponse]]] = {
+  def retrieveBiss(request: RetrieveSelfEmploymentBISSRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext,
+    logContext: EndpointLogContext,
+    correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[RetrieveSelfEmploymentBISSResponse]]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieveBiss(request)).leftMap(mapDesErrors(mappingDesToMtdError))
@@ -46,14 +49,15 @@ class SelfEmploymentBISSService @Inject()(connector: SelfEmploymentBISSConnector
     result.value
   }
 
-  private def mappingDesToMtdError: Map[String, MtdError] = Map(
-    "INVALID_IDVALUE"           -> NinoFormatError,
-    "INVALID_TAXYEAR"           -> TaxYearFormatError,
-    "INVALID_INCOMESOURCEID"    -> SelfEmploymentIdFormatError,
-    "NOT_FOUND"                 -> NotFoundError,
-    "INVALID_IDTYPE"            -> DownstreamError,
-    "INVALID_INCOMESOURCETYPE"  -> DownstreamError,
-    "SERVER_ERROR"              -> DownstreamError,
-    "SERVICE_UNAVAILABLE"       -> DownstreamError
-  )
+  private def mappingDesToMtdError: Map[String, MtdError] =
+    Map(
+      "INVALID_IDVALUE" -> NinoFormatError,
+      "INVALID_TAXYEAR" -> TaxYearFormatError,
+      "INVALID_INCOMESOURCEID" -> SelfEmploymentIdFormatError,
+      "NOT_FOUND" -> NotFoundError,
+      "INVALID_IDTYPE" -> DownstreamError,
+      "INVALID_INCOMESOURCETYPE" -> DownstreamError,
+      "SERVER_ERROR" -> DownstreamError,
+      "SERVICE_UNAVAILABLE" -> DownstreamError
+    )
 }

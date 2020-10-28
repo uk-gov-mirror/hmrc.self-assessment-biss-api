@@ -21,6 +21,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockRetrieveSelfEmploymentBISSRequestDataParser
 import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockSelfEmploymentBISSService}
 import v1.models.errors._
@@ -31,33 +32,36 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveSelfEmploymentBISSControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveSelfEmploymentBISSRequestDataParser
-    with MockSelfEmploymentBISSService {
+    with MockSelfEmploymentBISSService
+    with MockIdGenerator {
+
+  private val nino = "AA123456A"
+  private val taxYear = Some("2018-19")
+  private val selfEmploymentId = "123456789"
+  private val correlationId = "X-123"
 
   trait Test {
-    val hc = HeaderCarrier()
+    val hc: HeaderCarrier = HeaderCarrier()
 
     val controller = new RetrieveSelfEmploymentBISSController(
       authService = mockEnrolmentsAuthService,
       lookupService = mockMtdIdLookupService,
       requestParser = mockRequestParser,
       selfEmploymentBISSService = mockService,
-      cc = cc
+      cc = cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.generateCorrelationId.returns(correlationId)
   }
 
-  private val nino          = "AA123456A"
-  private val taxYear       =  Some("2018-19")
-  private val selfEmploymentId = "123456789"
-  private val correlationId = "X-123"
-
-  private val rawData     = RetrieveSelfEmploymentBISSRawData(nino, taxYear, selfEmploymentId)
+  private val rawData = RetrieveSelfEmploymentBISSRawData(nino, taxYear, selfEmploymentId)
   private val requestData = RetrieveSelfEmploymentBISSRequest(Nino(nino), DesTaxYear("2019"), selfEmploymentId)
 
   "retrieveBiss" should {
@@ -87,7 +91,7 @@ class RetrieveSelfEmploymentBISSControllerSpec
 
             MockRetrieveSelfEmploymentBISSRequestDataParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.retrieveBiss(nino, selfEmploymentId, taxYear)(fakeGetRequest)
 
@@ -118,7 +122,7 @@ class RetrieveSelfEmploymentBISSControllerSpec
 
             MockSelfEmploymentBISSService
               .retrieveBiss(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.retrieveBiss(nino, selfEmploymentId, taxYear)(fakeGetRequest)
 

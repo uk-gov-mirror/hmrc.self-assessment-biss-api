@@ -27,9 +27,9 @@ import scala.concurrent.Future
 
 class SelfEmploymentBISSConnectorSpec extends ConnectorSpec {
 
-  val desTaxYear = DesTaxYear("2019")
-  val nino = Nino("AA123456A")
-  val incomeSourceId = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
+  val desTaxYear: DesTaxYear = DesTaxYear("2019")
+  val nino: Nino = Nino("AA123456A")
+  val incomeSourceId: String = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
 
   class Test extends MockHttpClient with MockAppConfig {
     val connector: SelfEmploymentBISSConnector = new SelfEmploymentBISSConnector(http = mockHttpClient, appConfig = mockAppConfig)

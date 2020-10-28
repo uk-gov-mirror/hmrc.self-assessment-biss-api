@@ -32,11 +32,14 @@ import v1.support.DesResponseMappingSupport
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class UKPropertyBISSService @Inject()(connector: UKPropertyBISSConnector) extends DesResponseMappingSupport with Logging {
+class UKPropertyBISSService @Inject()(connector: UKPropertyBISSConnector)
+  extends DesResponseMappingSupport with Logging {
 
-  def retrieveBiss(request: RetrieveUKPropertyBISSRequest)
-                  (implicit hc: HeaderCarrier, ec: ExecutionContext, logContext: EndpointLogContext):
-  Future[Either[ErrorWrapper, ResponseWrapper[RetrieveUKPropertyBISSResponse]]] = {
+  def retrieveBiss(request: RetrieveUKPropertyBISSRequest)(
+    implicit hc: HeaderCarrier,
+    ec: ExecutionContext,
+    logContext: EndpointLogContext,
+    correlationId: String): Future[Either[ErrorWrapper, ResponseWrapper[RetrieveUKPropertyBISSResponse]]] = {
 
     val result = for {
       desResponseWrapper <- EitherT(connector.retrieveBiss(request)).leftMap(mapDesErrors(mappingDesToMtdError))

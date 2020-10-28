@@ -33,7 +33,8 @@ class UKPropertyBISSConnector @Inject()(val http: HttpClient,
 
   def retrieveBiss(request: RetrieveUKPropertyBISSRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[RetrieveUKPropertyBISSResponse]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[RetrieveUKPropertyBISSResponse]] = {
 
     val nino = request.nino.nino
     val taxYear = request.taxYear.toString

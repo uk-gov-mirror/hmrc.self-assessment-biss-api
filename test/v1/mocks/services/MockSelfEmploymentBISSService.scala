@@ -36,8 +36,8 @@ trait MockSelfEmploymentBISSService extends MockFactory {
 
     def retrieveBiss(requestData: RetrieveSelfEmploymentBISSRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveSelfEmploymentBISSResponse]]]] = {
       (mockService
-        .retrieveBiss(_: RetrieveSelfEmploymentBISSRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext))
-        .expects(requestData, *, *, *)
+        .retrieveBiss(_: RetrieveSelfEmploymentBISSRequest)(_: HeaderCarrier, _: ExecutionContext, _: EndpointLogContext, _: String))
+        .expects(requestData, *, *, *, *)
     }
   }
 
