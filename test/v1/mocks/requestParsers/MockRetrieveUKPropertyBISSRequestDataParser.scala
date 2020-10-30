@@ -24,11 +24,11 @@ import v1.models.requestData.{RetrieveUKPropertyBISSRawData, RetrieveUKPropertyB
 
 trait MockRetrieveUKPropertyBISSRequestDataParser extends MockFactory {
 
-  val mockRequestParser = mock[RetrieveUKPropertyBISSRequestDataParser]
+  val mockRequestParser: RetrieveUKPropertyBISSRequestDataParser = mock[RetrieveUKPropertyBISSRequestDataParser]
 
   object MockRetrieveUKPropertyBISSRequestDataParser {
     def parse(data: RetrieveUKPropertyBISSRawData): CallHandler[Either[ErrorWrapper, RetrieveUKPropertyBISSRequest]] = {
-      (mockRequestParser.parseRequest(_: RetrieveUKPropertyBISSRawData)).expects(data)
+      (mockRequestParser.parseRequest(_: RetrieveUKPropertyBISSRawData)(_: String)).expects(data, *)
     }
   }
 

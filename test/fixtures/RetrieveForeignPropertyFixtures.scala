@@ -17,7 +17,7 @@
 package fixtures
 
 import play.api.libs.json.{JsValue, Json}
-import v1.models.response.{RetrieveForeignPropertyBISSResponse, RetrieveSelfEmploymentBISSResponse}
+import v1.models.response.RetrieveForeignPropertyBISSResponse
 import v1.models.response.common.{Loss, Profit, Total}
 
 object RetrieveForeignPropertyFixtures {

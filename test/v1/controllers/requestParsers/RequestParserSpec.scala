@@ -25,6 +25,8 @@ import v1.models.requestData.RawData
 class RequestParserSpec extends UnitSpec {
 
   private val nino = "AA123456A"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
+
   case class Raw(nino: String) extends RawData
   case class Request(nino: Nino)
 
@@ -33,8 +35,8 @@ class RequestParserSpec extends UnitSpec {
 
     val validator: Validator[Raw]
 
-    val parser = new RequestParser[Raw, Request] {
-      val validator = test.validator
+    val parser: RequestParser[Raw, Request] = new RequestParser[Raw, Request] {
+      val validator: Validator[Raw] = test.validator
 
       protected def requestFor(data: Raw) = Request(Nino(data.nino))
     }
@@ -57,7 +59,7 @@ class RequestParserSpec extends UnitSpec {
           def validate(data: Raw) = List(NinoFormatError)
         }
 
-        parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(None, NinoFormatError, None))
+        parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError, None))
       }
     }
 
@@ -67,7 +69,7 @@ class RequestParserSpec extends UnitSpec {
           def validate(data: Raw) = List(NinoFormatError, RuleIncorrectOrEmptyBodyError)
         }
 
-        parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(None, BadRequestError, Some(Seq(NinoFormatError, RuleIncorrectOrEmptyBodyError))))
+        parser.parseRequest(Raw(nino)) shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(Seq(NinoFormatError, RuleIncorrectOrEmptyBodyError))))
       }
     }
   }

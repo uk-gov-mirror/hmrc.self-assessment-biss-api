@@ -18,7 +18,7 @@ package v1.connectors
 
 import config.AppConfig
 import javax.inject.{Inject, Singleton}
-import uk.gov.hmrc.http.{HeaderCarrier}
+import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.bootstrap.http.HttpClient
 import v1.connectors.httpparsers.StandardDesHttpParser._
 import v1.models.requestData.RetrieveForeignPropertyBISSRequest
@@ -32,7 +32,8 @@ class ForeignPropertyBISSConnector @Inject()(val http: HttpClient,
 
   def retrieveBiss(request: RetrieveForeignPropertyBISSRequest)(
     implicit ec: ExecutionContext,
-    hc: HeaderCarrier): Future[DesOutcome[RetrieveForeignPropertyBISSResponse]] = {
+    hc: HeaderCarrier,
+    correlationId: String): Future[DesOutcome[RetrieveForeignPropertyBISSResponse]] = {
 
     val nino = request.nino
     val businessId = request.businessId

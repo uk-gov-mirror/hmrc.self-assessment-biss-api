@@ -21,6 +21,7 @@ import play.api.libs.json.Json
 import play.api.mvc.Result
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
+import v1.mocks.MockIdGenerator
 import v1.mocks.requestParsers.MockRetrieveUKPropertyBISSRequestDataParser
 import v1.mocks.services.{MockEnrolmentsAuthService, MockMtdIdLookupService, MockUKPropertyBISSService}
 import v1.models.des.IncomeSourceType
@@ -38,34 +39,34 @@ class RetrieveUKPropertyBISSControllerSpec
     with MockEnrolmentsAuthService
     with MockMtdIdLookupService
     with MockRetrieveUKPropertyBISSRequestDataParser
-    with MockUKPropertyBISSService {
+    with MockUKPropertyBISSService
+    with MockIdGenerator {
 
-  private val nino            = "AA123456A"
-  private val taxYear         =  Some("2018-19")
-  private val typeOfBusiness  = Some("uk-property-fhl")
-  private val secondTypeOfBusiness  = Some("uk-property-non-fhl")
-  private val correlationId   = "X-123"
+  private val nino = "AA123456A"
+  private val taxYear = Some("2018-19")
+  private val typeOfBusiness = Some("uk-property-fhl")
+  private val secondTypeOfBusiness = Some("uk-property-non-fhl")
+  private val correlationId = "X-123"
 
-  val response: RetrieveUKPropertyBISSResponse =
-    RetrieveUKPropertyBISSResponse (
-      Total(
-        income = 100.00,
-        expenses = Some(50.00),
-        additions = Some(5.00),
-        deductions = Some(60.00)
-      ),
-      Some(Profit(
-        net = Some(20.00),
-        taxable = Some(10.00)
-      )),
-      Some(Loss(
-        net = Some(10.00),
-        taxable = Some(35.00)
-      ))
-    )
+  val response: RetrieveUKPropertyBISSResponse = RetrieveUKPropertyBISSResponse (
+    Total(
+      income = 100.00,
+      expenses = Some(50.00),
+      additions = Some(5.00),
+      deductions = Some(60.00)
+    ),
+    Some(Profit(
+      net = Some(20.00),
+      taxable = Some(10.00)
+    )),
+    Some(Loss(
+      net = Some(10.00),
+      taxable = Some(35.00)
+    ))
+  )
 
-  private val rawData     = RetrieveUKPropertyBISSRawData(nino, taxYear, typeOfBusiness)
-  private val rawDataTwo    = RetrieveUKPropertyBISSRawData(nino, taxYear, secondTypeOfBusiness)
+  private val rawData = RetrieveUKPropertyBISSRawData(nino, taxYear, typeOfBusiness)
+  private val rawDataTwo = RetrieveUKPropertyBISSRawData(nino, taxYear, secondTypeOfBusiness)
   private val requestData = RetrieveUKPropertyBISSRequest(Nino(nino), DesTaxYear("2019"), IncomeSourceType.`uk-property`)
   private val requestDataTwo = RetrieveUKPropertyBISSRequest(Nino(nino), DesTaxYear("2019"), IncomeSourceType.`fhl-property-uk`)
 
@@ -77,11 +78,13 @@ class RetrieveUKPropertyBISSControllerSpec
       lookupService = mockMtdIdLookupService,
       requestParser = mockRequestParser,
       ukPropertyBISSService = mockService,
-      cc =  cc
+      cc =  cc,
+      idGenerator = mockIdGenerator
     )
 
     MockedMtdIdLookupService.lookup(nino).returns(Future.successful(Right("test-mtd-id")))
     MockedEnrolmentsAuthService.authoriseUser()
+    MockIdGenerator.generateCorrelationId.returns(correlationId)
   }
 
   "retrieveBiss" should {
@@ -130,7 +133,7 @@ class RetrieveUKPropertyBISSControllerSpec
 
             MockRetrieveUKPropertyBISSRequestDataParser
               .parse(rawData)
-              .returns(Left(ErrorWrapper(Some(correlationId), error, None)))
+              .returns(Left(ErrorWrapper(correlationId, error, None)))
 
             val result: Future[Result] = controller.retrieveBiss(nino, taxYear,  typeOfBusiness)(fakeGetRequest)
 
@@ -161,7 +164,7 @@ class RetrieveUKPropertyBISSControllerSpec
 
             MockUKPropertyBISSService
               .retrieveBiss(requestData)
-              .returns(Future.successful(Left(ErrorWrapper(Some(correlationId), mtdError))))
+              .returns(Future.successful(Left(ErrorWrapper(correlationId, mtdError))))
 
             val result: Future[Result] = controller.retrieveBiss(nino, taxYear, typeOfBusiness)(fakeGetRequest)
 

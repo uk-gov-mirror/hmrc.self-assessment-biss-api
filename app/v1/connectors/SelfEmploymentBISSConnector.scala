@@ -33,7 +33,8 @@ class SelfEmploymentBISSConnector @Inject()(val http: HttpClient,
 
   def retrieveBiss(request: RetrieveSelfEmploymentBISSRequest)(
     implicit hc: HeaderCarrier,
-    ec: ExecutionContext): Future[DesOutcome[RetrieveSelfEmploymentBISSResponse]] = {
+    ec: ExecutionContext,
+    correlationId: String): Future[DesOutcome[RetrieveSelfEmploymentBISSResponse]] = {
 
     val nino = request.nino.nino
     val taxYear = request.taxYear.toString

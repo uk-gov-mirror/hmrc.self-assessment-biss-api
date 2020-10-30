@@ -22,7 +22,7 @@ import javax.inject.{Inject, Singleton}
 import play.mvc.Http.MimeTypes
 import play.api.libs.json.Json
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import utils.Logging
+import utils.{IdGenerator, Logging}
 import v1.controllers.requestParsers.RetrieveUKPropertyBISSRequestDataParser
 import v1.models.errors._
 import v1.models.requestData.RetrieveUKPropertyBISSRawData
@@ -31,16 +31,13 @@ import v1.services.{EnrolmentsAuthService, MtdIdLookupService, UKPropertyBISSSer
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton
-class RetrieveUKPropertyBISSController @Inject()(
-                                                  val authService: EnrolmentsAuthService,
-                                                  val lookupService: MtdIdLookupService,
-                                                  requestParser: RetrieveUKPropertyBISSRequestDataParser,
-                                                  ukPropertyBISSService: UKPropertyBISSService,
-                                                  cc: ControllerComponents
-                                                )(implicit ec: ExecutionContext)
-  extends AuthorisedController(cc)
-    with BaseController
-    with Logging {
+class RetrieveUKPropertyBISSController @Inject()(val authService: EnrolmentsAuthService,
+                                                 val lookupService: MtdIdLookupService,
+                                                 requestParser: RetrieveUKPropertyBISSRequestDataParser,
+                                                 ukPropertyBISSService: UKPropertyBISSService,
+                                                 cc: ControllerComponents,
+                                                 val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc) with BaseController with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(
@@ -50,6 +47,12 @@ class RetrieveUKPropertyBISSController @Inject()(
 
   def retrieveBiss(nino: String, taxYear: Option[String], typeOfBusiness: Option[String]): Action[AnyContent] =
     authorisedAction(nino).async { implicit request =>
+
+      implicit val correlationId: String = idGenerator.generateCorrelationId
+      logger.info(
+        s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] " +
+          s"with CorrelationId: $correlationId")
+
       val rawData = RetrieveUKPropertyBISSRawData(nino, taxYear, typeOfBusiness)
       val result =
         for {
@@ -66,8 +69,13 @@ class RetrieveUKPropertyBISSController @Inject()(
             .as(MimeTypes.JSON)
         }
       result.leftMap { errorWrapper =>
-        val correlationId = getCorrelationId(errorWrapper)
-        errorResult(errorWrapper).withApiHeaders(correlationId)
+        val resCorrelationId = errorWrapper.correlationId
+        val result = errorResult(errorWrapper).withApiHeaders(resCorrelationId)
+        logger.info(
+          s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +
+            s"Error response received with CorrelationId: $resCorrelationId")
+
+        result
       }.merge
     }
 

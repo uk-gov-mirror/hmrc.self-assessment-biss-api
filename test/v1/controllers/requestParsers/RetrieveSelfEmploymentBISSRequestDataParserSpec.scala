@@ -30,6 +30,7 @@ class RetrieveSelfEmploymentBISSRequestDataParserSpec extends UnitSpec {
   private val nino = "AA123456B"
   private val taxYear = "2018-19"
   private val selfEmploymentId = "XAIS12345678901"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val inputData = RetrieveSelfEmploymentBISSRawData(nino, Some(taxYear), selfEmploymentId)
 
@@ -56,13 +57,13 @@ class RetrieveSelfEmploymentBISSRequestDataParserSpec extends UnitSpec {
       "a single error is found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, NinoFormatError))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "a multiple errors are found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError, TaxYearFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

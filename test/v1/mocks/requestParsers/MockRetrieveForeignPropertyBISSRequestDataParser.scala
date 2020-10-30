@@ -24,11 +24,11 @@ import v1.models.requestData.{RetrieveForeignPropertyBISSRawData, RetrieveForeig
 
 trait MockRetrieveForeignPropertyBISSRequestDataParser extends MockFactory {
 
-  val mockRequestParser = mock[RetrieveForeignPropertyBISSRequestDataParser]
+  val mockRequestParser: RetrieveForeignPropertyBISSRequestDataParser = mock[RetrieveForeignPropertyBISSRequestDataParser]
 
   object MockRetrieveForeignPropertyBISSRequestDataParser {
     def parse(data: RetrieveForeignPropertyBISSRawData): CallHandler[Either[ErrorWrapper, RetrieveForeignPropertyBISSRequest]] = {
-      (mockRequestParser.parseRequest(_: RetrieveForeignPropertyBISSRawData)).expects(data)
+      (mockRequestParser.parseRequest(_: RetrieveForeignPropertyBISSRawData)(_: String)).expects(data, *)
     }
   }
 }

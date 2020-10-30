@@ -16,7 +16,6 @@
 
 package v1.services
 
-import support.UnitSpec
 import uk.gov.hmrc.domain.Nino
 import uk.gov.hmrc.http.HeaderCarrier
 import v1.controllers.EndpointLogContext
@@ -28,17 +27,13 @@ import v1.models.requestData.{DesTaxYear, RetrieveForeignPropertyBISSRequest}
 import v1.models.response.RetrieveForeignPropertyBISSResponse
 import v1.models.response.common.{Loss, Profit, Total}
 
-import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
+class ForeignPropertyBISSServiceSpec extends ServiceSpec {
 
-class ForeignPropertyBISSServiceSpec extends UnitSpec {
   private val nino = Nino("AA123456A")
   private val taxYear = "2019"
-  private val correlationId = "X-123"
   private val businessId = "XAIS12345678910"
-
-
 
   private val requestData = RetrieveForeignPropertyBISSRequest(nino, businessId, IncomeSourceType.`foreign-property`,DesTaxYear(taxYear))
 
@@ -49,23 +44,22 @@ class ForeignPropertyBISSServiceSpec extends UnitSpec {
     val service = new ForeignPropertyBISSService(mockConnector)
   }
 
-  val response =
-    RetrieveForeignPropertyBISSResponse(
-      Total(
-        income = 100.00,
-        expenses = Some(50.00),
-        additions = Some(5.00),
-        deductions = Some(60.00)
-      ),
-      Some(Profit(
-        net = Some(20.00),
-        taxable = Some(10.00)
-      )),
-      Some(Loss(
-        net = Some(10.00),
-        taxable = Some(35.00)
-      ))
-    )
+  val response: RetrieveForeignPropertyBISSResponse = RetrieveForeignPropertyBISSResponse(
+    Total(
+      income = 100.00,
+      expenses = Some(50.00),
+      additions = Some(5.00),
+      deductions = Some(60.00)
+    ),
+    Some(Profit(
+      net = Some(20.00),
+      taxable = Some(10.00)
+    )),
+    Some(Loss(
+      net = Some(10.00),
+      taxable = Some(35.00)
+    ))
+  )
 
   "retrieveBiss" should {
     "return a valid response" when {
@@ -84,7 +78,7 @@ class ForeignPropertyBISSServiceSpec extends UnitSpec {
           MockForeignPropertyBISSConnector.retrieveBiss(requestData)
             .returns(Future.successful(Left(ResponseWrapper(correlationId, DesErrors.single(DesErrorCode(desErrorCode))))))
 
-          await(service.retrieveBiss(requestData)) shouldBe Left(ErrorWrapper(Some(correlationId), error))
+          await(service.retrieveBiss(requestData)) shouldBe Left(ErrorWrapper(correlationId, error))
         }
 
       val input = Seq(

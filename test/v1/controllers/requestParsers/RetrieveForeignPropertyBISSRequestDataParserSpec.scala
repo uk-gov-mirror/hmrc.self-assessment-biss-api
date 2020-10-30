@@ -33,6 +33,7 @@ class RetrieveForeignPropertyBISSRequestDataParserSpec extends UnitSpec {
   private val typeOfBusinessNonFhl = Some("foreign-property")
   private val typeOfBusinessFhl = Some("foreign-property-fhl-eea")
   private val businessId = "XAIS12345678910"
+  implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 
   private val inputData = RetrieveForeignPropertyBISSRawData(nino.toString, Some(businessId), typeOfBusinessFhl, Some(taxYear))
   private val inputDataTwo = RetrieveForeignPropertyBISSRawData(nino.toString, Some(businessId), typeOfBusinessNonFhl, Some(taxYear))
@@ -66,13 +67,13 @@ class RetrieveForeignPropertyBISSRequestDataParserSpec extends UnitSpec {
       "a single error is found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, NinoFormatError))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, NinoFormatError))
       }
 
       "mutliple errors are found" in new Test {
         MockValidator.validate(inputData).returns(List(NinoFormatError, TaxYearFormatError))
 
-        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(None, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
+        parser.parseRequest(inputData) shouldBe Left(ErrorWrapper(correlationId, BadRequestError, Some(List(NinoFormatError, TaxYearFormatError))))
       }
     }
   }

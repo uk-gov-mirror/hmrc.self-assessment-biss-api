@@ -33,8 +33,8 @@ trait MockForeignPropertyBISSConnector extends MockFactory {
 
     def retrieveBiss(requestData: RetrieveForeignPropertyBISSRequest): CallHandler[Future[DesOutcome[RetrieveForeignPropertyBISSResponse]]] = {
       (mockConnector
-        .retrieveBiss(_: RetrieveForeignPropertyBISSRequest)(_: ExecutionContext, _: HeaderCarrier))
-        .expects(requestData, *, *)
+        .retrieveBiss(_: RetrieveForeignPropertyBISSRequest)(_: ExecutionContext, _: HeaderCarrier, _: String))
+        .expects(requestData, *, *, *)
     }
   }
 }
