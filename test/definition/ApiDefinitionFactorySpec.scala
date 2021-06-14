@@ -111,32 +111,4 @@ class ApiDefinitionFactorySpec extends UnitSpec {
       }
     }
   }
-
-  "buildWhiteListingAccess" when {
-    "the 'featureSwitch' parameter is not present" should {
-      "return None" in new Test {
-        MockedAppConfig.featureSwitch returns None
-        apiDefinitionFactory.buildWhiteListingAccess() shouldBe None
-      }
-    }
-
-    "the 'featureSwitch' parameter is present and white listing is enabled" should {
-      "return the correct Access object" in new Test {
-
-        MockedAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString(
-          """|white-list.enabled = true
-             |white-list.applicationIds = ["anId"]
-             |""".stripMargin))))
-
-        apiDefinitionFactory.buildWhiteListingAccess() shouldBe Some(Access("PRIVATE", Seq("anId")))
-      }
-    }
-
-    "the 'featureSwitch' parameter is present and white listing is not enabled" should {
-      "return None" in new Test {
-        MockedAppConfig.featureSwitch.returns(Some(Configuration(ConfigFactory.parseString("""|white-list.enabled = false""".stripMargin))))
-        apiDefinitionFactory.buildWhiteListingAccess() shouldBe None
-      }
-    }
-  }
 }
