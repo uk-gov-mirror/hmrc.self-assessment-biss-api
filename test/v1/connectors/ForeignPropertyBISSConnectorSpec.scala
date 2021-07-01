@@ -17,9 +17,9 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.des.IncomeSourceType
+import v1.models.domain.Nino
 import v1.models.outcomes.ResponseWrapper
 import v1.models.requestData.{DesTaxYear, RetrieveForeignPropertyBISSRequest}
 import v1.models.response.RetrieveForeignPropertyBISSResponse
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 class ForeignPropertyBISSConnectorSpec extends ConnectorSpec {
 
   val desTaxYear: DesTaxYear = DesTaxYear("2019")
-  val nino: Nino = Nino("AA123456A")
+  val nino: String = "AA123456A"
   val incomeSourceId: String = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
   val businessId: String = "XAIS12345678910"
 
@@ -68,10 +68,11 @@ class ForeignPropertyBISSConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desBaseUrl returns baseUrl
     MockedAppConfig.desToken returns "des-token"
     MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "retrieveBiss" when {
-    val request = RetrieveForeignPropertyBISSRequest(nino, businessId, IncomeSourceType.`foreign-property`, desTaxYear)
+    val request = RetrieveForeignPropertyBISSRequest(Nino(nino), businessId, IncomeSourceType.`foreign-property`, desTaxYear)
 
     "a valid request is supplied" should {
       "return a successful response with the correct correlationId" in new Test {
@@ -79,7 +80,7 @@ class ForeignPropertyBISSConnectorSpec extends ConnectorSpec {
         val expected = Right(ResponseWrapper(correlationId, response))
 
         MockedHttpClient
-          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss?incomesourceid=$businessId", desRequestHeaders: _*)
+          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss?incomesourceid=$businessId", dummyDesHeaderCarrierConfig)
           .returns(Future.successful(expected))
 
         await(connector.retrieveBiss(request)) shouldBe expected
@@ -91,7 +92,7 @@ class ForeignPropertyBISSConnectorSpec extends ConnectorSpec {
         val expected = Right(ResponseWrapper(correlationId, responseWithMissingOptionals))
 
         MockedHttpClient
-          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss?incomesourceid=$businessId", desRequestHeaders: _*)
+          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/foreign-property/${desTaxYear.toString}/biss?incomesourceid=$businessId", dummyDesHeaderCarrierConfig)
           .returns(Future.successful(expected))
 
         await(connector.retrieveBiss(request)) shouldBe expected

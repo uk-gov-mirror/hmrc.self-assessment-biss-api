@@ -17,7 +17,7 @@
 package v1.connectors
 
 import mocks.MockAppConfig
-import uk.gov.hmrc.domain.Nino
+import v1.models.domain.Nino
 import v1.mocks.MockHttpClient
 import v1.models.des.IncomeSourceType
 import v1.models.outcomes.ResponseWrapper
@@ -30,7 +30,7 @@ import scala.concurrent.Future
 class UKPropertyBISSConnectorSpec extends ConnectorSpec {
 
   val desTaxYear: DesTaxYear = DesTaxYear("2019")
-  val nino: Nino = Nino("AA123456A")
+  val nino: String = "AA123456A"
   val incomeSourceId: String = "041f7e4d-87b9-4d4a-a296-3cfbdf92f7e2"
 
   val response: RetrieveUKPropertyBISSResponse = RetrieveUKPropertyBISSResponse(
@@ -57,11 +57,12 @@ class UKPropertyBISSConnectorSpec extends ConnectorSpec {
     MockedAppConfig.desBaseUrl returns baseUrl
     MockedAppConfig.desToken returns "des-token"
     MockedAppConfig.desEnvironment returns "des-environment"
+    MockedAppConfig.desEnvironmentHeaders returns Some(allowedDesHeaders)
   }
 
   "retrieveBiss" when {
 
-    val request = RetrieveUKPropertyBISSRequest(nino, desTaxYear, IncomeSourceType.`uk-property`)
+    val request = RetrieveUKPropertyBISSRequest(Nino(nino), desTaxYear, IncomeSourceType.`uk-property`)
 
     "a valid request is supplied" should {
       "return a successful response with the correct correlationId" in new Test {
@@ -69,7 +70,7 @@ class UKPropertyBISSConnectorSpec extends ConnectorSpec {
         val expected = Right(ResponseWrapper(correlationId, response))
 
         MockedHttpClient
-          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/uk-property/${desTaxYear.toString}/biss", desRequestHeaders: _*)
+          .get(s"$baseUrl/income-tax/income-sources/nino/$nino/uk-property/${desTaxYear.toString}/biss", dummyDesHeaderCarrierConfig)
           .returns(Future.successful(expected))
 
         await(connector.retrieveBiss(request)) shouldBe expected
