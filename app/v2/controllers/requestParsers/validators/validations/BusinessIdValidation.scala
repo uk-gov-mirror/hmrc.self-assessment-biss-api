@@ -16,16 +16,13 @@
 
 package v2.controllers.requestParsers.validators.validations
 
-import v2.models.errors.MtdError
-import v2.models.requestData.TaxYear
+import v2.models.errors.{BusinessIdFormatError, MtdError}
 
-object MtdTaxYearValidation  {
+object BusinessIdValidation {
 
-  // @param taxYear In format YYYY-YY
-  def validate(taxYear: String, minTaxYear: Int,  error: MtdError): List[MtdError] = {
+  private val regex = "^X[A-Z0-9]{1}IS[0-9]{11}$"
 
-    val desTaxYear = Integer.parseInt(TaxYear.fromMtd(taxYear).downstreamValue)
-
-    if (desTaxYear >= minTaxYear) NoValidationErrors else List(error)
+  def validate(businessId: String): List[MtdError] = {
+    if (businessId.matches(regex)) NoValidationErrors else List(BusinessIdFormatError)
   }
 }
