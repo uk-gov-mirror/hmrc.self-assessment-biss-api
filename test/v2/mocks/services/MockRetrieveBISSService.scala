@@ -36,7 +36,7 @@ trait MockRetrieveBISSService extends MockFactory {
 
     def retrieveBiss(requestData: RetrieveBISSRequest): CallHandler[Future[Either[ErrorWrapper, ResponseWrapper[RetrieveBISSResponse]]]] = {
       (mockService
-        .retrieveBiss(_: RetrieveBISSRequest, _: String)(_: HeaderCarrier, _: EndpointLogContext))
+        .retrieveBiss(_: RetrieveBISSRequest)(_: HeaderCarrier, _: String, _: EndpointLogContext))
         .expects(requestData, *, *, *)
     }
 

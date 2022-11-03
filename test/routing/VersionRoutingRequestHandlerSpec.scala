@@ -74,7 +74,7 @@ class VersionRoutingRequestHandlerSpec extends UnitSpec with Inside with MockApp
     private val filters                      = mock[HttpFilters]
     (filters.filters _).stubs().returns(Seq.empty)
 
-    MockedAppConfig.featureSwitch.returns(Configuration(ConfigFactory.parseString("""
+    MockedAppConfig.featureSwitches.returns(Configuration(ConfigFactory.parseString("""
                                                                                          |version-2.enabled = true
                                                                          """.stripMargin)))
 

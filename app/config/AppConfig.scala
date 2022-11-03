@@ -23,23 +23,34 @@ import uk.gov.hmrc.play.bootstrap.config.ServicesConfig
 
 trait AppConfig {
 
-  def desBaseUrl: String
 
-  def ifsBaseUrl: String
 
   def mtdIdBaseUrl: String
 
+  // DES Config
+  def desBaseUrl: String
   def desEnv: String
-
-  def ifsEnv: String
-
-  def desEnvironmentHeaders: Option[Seq[String]]
-
-  def ifsEnvironmentHeaders: Option[Seq[String]]
-
   def desToken: String
+  def desEnvironmentHeaders: Option[Seq[String]]
+  lazy val desDownstreamConfig: DownstreamConfig =
+    DownstreamConfig(baseUrl = desBaseUrl, env = desEnv, token = desToken, environmentHeaders = desEnvironmentHeaders)
 
+  // IFS Config
+  def ifsBaseUrl: String
+  def ifsEnv: String
   def ifsToken: String
+  def ifsEnvironmentHeaders: Option[Seq[String]]
+  lazy val ifsDownstreamConfig: DownstreamConfig =
+    DownstreamConfig(baseUrl = ifsBaseUrl, env = ifsEnv, token = ifsToken, environmentHeaders = ifsEnvironmentHeaders)
+
+  // Tax Year Specific (TYS) IFS Config
+  def tysIfsBaseUrl: String
+  def tysIfsEnv: String
+  def tysIfsToken: String
+  def tysIfsEnvironmentHeaders: Option[Seq[String]]
+  lazy val taxYearSpecificIfsDownstreamConfig: DownstreamConfig =
+    DownstreamConfig(baseUrl = tysIfsBaseUrl, env = tysIfsEnv, token = tysIfsToken, environmentHeaders = tysIfsEnvironmentHeaders)
+
 
   def apiGatewayContext: String
 
@@ -57,21 +68,23 @@ class AppConfigImpl @Inject() (config: ServicesConfig, configuration: Configurat
 
   val mtdIdBaseUrl: String = config.baseUrl("mtd-id-lookup")
 
+  // DES Config
   val desBaseUrl: String = config.baseUrl("des")
-
-  val ifsBaseUrl: String = config.baseUrl("ifs")
-
   val desEnv: String = config.getString("microservice.services.des.env")
-
-  val ifsEnv: String = config.getString("microservice.services.ifs.env")
-
+  val desToken: String = config.getString("microservice.services.des.token")
   val desEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.des.environmentHeaders")
 
+  // IFS Config
+  val ifsBaseUrl: String = config.baseUrl("ifs")
+  val ifsEnv: String = config.getString("microservice.services.ifs.env")
+  val ifsToken: String = config.getString("microservice.services.ifs.token")
   val ifsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.ifs.environmentHeaders")
 
-  val desToken: String = config.getString("microservice.services.des.token")
-
-  val ifsToken: String = config.getString("microservice.services.ifs.token")
+  // Tax Year Specific (TYS) IFS Config
+  val tysIfsBaseUrl: String = config.baseUrl("tys-ifs")
+  val tysIfsEnv: String = config.getString("microservice.services.tys-ifs.env")
+  val tysIfsToken: String = config.getString("microservice.services.tys-ifs.token")
+  val tysIfsEnvironmentHeaders: Option[Seq[String]] = configuration.getOptional[Seq[String]]("microservice.services.tys-ifs.environmentHeaders")
 
   val apiGatewayContext: String = config.getString("api.gateway.context")
 

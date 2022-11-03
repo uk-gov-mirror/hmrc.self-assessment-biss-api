@@ -33,7 +33,7 @@ class RetrieveBISSServiceSpec extends ServiceSpec {
   private val requestData = RetrieveBISSRequest(Nino("AA123456A"), TypeOfBusiness.`foreign-property`, TaxYear.fromMtd("2019-20"), "XAIS12345678910")
   private val response    = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
 
-  private val correlationIdIn  = "correlation-id-in"
+  private implicit val correlationIdIn: String = "correlation-id-in"
   private val correlationIdOut = "correlation-id-out"
 
   implicit val loggingContext: EndpointLogContext = EndpointLogContext("controller", "endpoint")
@@ -48,7 +48,7 @@ class RetrieveBISSServiceSpec extends ServiceSpec {
         MockRetrieveBISSConnector.retrieveBiss(requestData, correlationIdIn) returns Future.successful(
           Right(ResponseWrapper(correlationIdOut, response)))
 
-        service.retrieveBiss(requestData, correlationIdIn).futureValue shouldBe Right(ResponseWrapper(correlationIdOut, response))
+        service.retrieveBiss(requestData).futureValue shouldBe Right(ResponseWrapper(correlationIdOut, response))
       }
     }
 
@@ -60,7 +60,7 @@ class RetrieveBISSServiceSpec extends ServiceSpec {
           MockRetrieveBISSConnector.retrieveBiss(requestData, correlationIdIn) returns Future.successful(
             Left(ResponseWrapper(correlationIdOut, IfsErrors.single(IfsErrorCode(downstreamErrorCode)))))
 
-          service.retrieveBiss(requestData, correlationIdIn).futureValue shouldBe Left(ErrorWrapper(correlationIdOut, error))
+          service.retrieveBiss(requestData).futureValue shouldBe Left(ErrorWrapper(correlationIdOut, error))
         }
 
       val input = Seq(

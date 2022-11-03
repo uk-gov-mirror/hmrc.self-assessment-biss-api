@@ -32,12 +32,13 @@ import scala.concurrent.{ExecutionContext, Future}
 @Singleton
 class RetrieveBISSService @Inject() (connector: RetrieveBISSConnector)(implicit ec: ExecutionContext) extends ServiceSupport with Logging {
 
-  def retrieveBiss(request: RetrieveBISSRequest, correlationId: String)(implicit
+  def retrieveBiss(request: RetrieveBISSRequest)(implicit
       hc: HeaderCarrier,
+      correlationId: String,
       logContext: EndpointLogContext): Future[ServiceOutcome[RetrieveBISSResponse]] = {
 
     val result = for {
-      desResponseWrapper <- EitherT(connector.retrieveBiss(request, correlationId)).leftMap(mapDownstreamErrors(mappingToMtdError))
+      desResponseWrapper <- EitherT(connector.retrieveBiss(request)).leftMap(mapDownstreamErrors(mappingToMtdError))
     } yield desResponseWrapper
 
     result.value
