@@ -56,7 +56,7 @@ class RetrieveBISSController @Inject() (val authService: EnrolmentsAuthService,
       val result =
         for {
           parsedRequest <- EitherT.fromEither[Future](requestParser.parseRequest(rawData))
-          response      <- EitherT(retrieveBISSService.retrieveBiss(parsedRequest, correlationId))
+          response      <- EitherT(retrieveBISSService.retrieveBiss(parsedRequest))
         } yield {
           logger.info(
             s"[${endpointLogContext.controllerName}][${endpointLogContext.endpointName}] - " +

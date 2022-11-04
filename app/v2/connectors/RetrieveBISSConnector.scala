@@ -19,29 +19,27 @@ package v2.connectors
 import config.AppConfig
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
 import v2.connectors.DownstreamUri.IfsUri
+import v2.connectors.httpparsers.StandardDownstreamHttpParser._
 import v2.models.requestData.RetrieveBISSRequest
 import v2.models.response.RetrieveBISSResponse
 
 import javax.inject.{Inject, Singleton}
 import scala.concurrent.{ExecutionContext, Future}
 
-import v2.connectors.httpparsers.StandardDownstreamHttpParser._
-
 @Singleton
 class RetrieveBISSConnector @Inject() (val http: HttpClient, val appConfig: AppConfig)(implicit ec: ExecutionContext)
     extends BaseDownstreamConnector {
 
-  def retrieveBiss(request: RetrieveBISSRequest, correlationId: String)(implicit
-      hc: HeaderCarrier): Future[DownstreamOutcome[RetrieveBISSResponse]] = {
+  def retrieveBiss(
+      request: RetrieveBISSRequest)(implicit hc: HeaderCarrier, correlationId: String): Future[DownstreamOutcome[RetrieveBISSResponse]] = {
 
     val nino             = request.nino.nino
     val incomeSourceType = request.typeOfBusiness.toIncomeSourceType
-    val taxYear          = request.taxYear.downstreamValue
+    val taxYear          = request.taxYear.asDownstream
     val businessId       = request.businessId
 
     val url = s"income-tax/income-sources/nino/$nino/$incomeSourceType/$taxYear/biss"
 
-    get[RetrieveBISSResponse](IfsUri(url), queryParams = Seq("incomeSourceId" -> businessId), correlationId = correlationId)
+    get(uri = IfsUri[RetrieveBISSResponse](url), queryParams = Seq("incomeSourceId" -> businessId))
   }
-
 }
