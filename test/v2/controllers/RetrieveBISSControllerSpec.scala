@@ -29,8 +29,8 @@ import v2.models.requestData.{RetrieveBISSRawData, RetrieveBISSRequest, TaxYear}
 import v2.models.response.RetrieveBISSResponse
 import v2.models.response.common.Total
 
-import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
 class RetrieveBISSControllerSpec
     extends ControllerBaseSpec
@@ -50,10 +50,10 @@ class RetrieveBISSControllerSpec
   val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
 
   val responseJson: JsValue = Json.parse("""{
-                                                    |  "total": {
-                                                    |    "income": 100.00
-                                                    |  }
-                                                    |}""".stripMargin)
+      |  "total": {
+      |    "income": 100.00
+      |  }
+      |}""".stripMargin)
 
   private val rawData     = RetrieveBISSRawData(nino, typeOfBusiness, taxYear, businessId)
   private val requestData = RetrieveBISSRequest(Nino(nino), TypeOfBusiness.`uk-property-fhl`, TaxYear.fromMtd(taxYear), businessId)
@@ -142,7 +142,7 @@ class RetrieveBISSControllerSpec
           (TaxYearFormatError, BAD_REQUEST),
           (TypeOfBusinessFormatError, BAD_REQUEST),
           (BusinessIdFormatError, BAD_REQUEST),
-          (RuleNoIncomeSubmissionsExist, FORBIDDEN),
+          (RuleNoIncomeSubmissionsExist, BAD_REQUEST),
           (NotFoundError, NOT_FOUND),
           (DownstreamError, INTERNAL_SERVER_ERROR)
         )

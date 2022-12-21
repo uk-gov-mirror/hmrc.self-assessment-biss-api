@@ -16,17 +16,16 @@
 
 package v2.endpoints
 
-import play.api.http.HeaderNames.ACCEPT
+import play.api.http.HeaderNames._
+import play.api.http.MimeTypes
 import play.api.http.Status._
 import play.api.libs.json.Json
 import play.api.libs.ws.{WSRequest, WSResponse}
+import play.api.test.Helpers.AUTHORIZATION
 import support.IntegrationBaseSpec
 import v2.fixtures.RetrieveBISSFixture
 import v2.models.errors._
 import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
-import play.api.http.HeaderNames._
-import play.api.http.MimeTypes
-import play.api.test.Helpers.AUTHORIZATION
 
 class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
 
@@ -61,7 +60,8 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
   }
 
   trait NonTysTest extends Test {
-    def downstreamUrl: String            = s"/income-tax/income-sources/nino/$nino/$incomeSourceType/$downstreamTaxYear/biss"
+    def downstreamUrl: String = s"/income-tax/income-sources/nino/$nino/$incomeSourceType/$downstreamTaxYear/biss"
+
     def queryParams: Map[String, String] = Map("incomeSourceId" -> businessId)
   }
 
@@ -180,7 +180,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
         (BAD_REQUEST, "INVALID_CORRELATIONID", INTERNAL_SERVER_ERROR, DownstreamError),
         (BAD_REQUEST, "INVALID_INCOMESOURCETYPE", INTERNAL_SERVER_ERROR, DownstreamError),
         (BAD_REQUEST, "INVALID_INCOMESOURCEID", BAD_REQUEST, BusinessIdFormatError),
-        (UNPROCESSABLE_ENTITY, "INCOME_SUBMISSIONS_NOT_EXIST", FORBIDDEN, RuleNoIncomeSubmissionsExist),
+        (UNPROCESSABLE_ENTITY, "INCOME_SUBMISSIONS_NOT_EXIST", BAD_REQUEST, RuleNoIncomeSubmissionsExist),
         (UNPROCESSABLE_ENTITY, "INVALID_ACCOUNTING_PERIOD", INTERNAL_SERVER_ERROR, DownstreamError),
         (UNPROCESSABLE_ENTITY, "INVALID_QUERY_PARAM", INTERNAL_SERVER_ERROR, DownstreamError),
         (NOT_FOUND, "NOT_FOUND", NOT_FOUND, NotFoundError),

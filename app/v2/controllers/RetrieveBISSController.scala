@@ -88,13 +88,13 @@ class RetrieveBISSController @Inject() (val authService: EnrolmentsAuthService,
             TypeOfBusinessFormatError,
             RuleTaxYearNotSupportedError,
             RuleTaxYearRangeInvalidError,
-            RuleTypeOfBusinessError
+            RuleTypeOfBusinessError,
+            RuleNoIncomeSubmissionsExist
           ) =>
         BadRequest(Json.toJson(errorWrapper))
-      case RuleNoIncomeSubmissionsExist => Forbidden(Json.toJson(errorWrapper))
-      case NotFoundError                => NotFound(Json.toJson(errorWrapper))
-      case DownstreamError              => InternalServerError(Json.toJson(errorWrapper))
-      case _                            => unhandledError(errorWrapper)
+      case NotFoundError   => NotFound(Json.toJson(errorWrapper))
+      case DownstreamError => InternalServerError(Json.toJson(errorWrapper))
+      case _               => unhandledError(errorWrapper)
     }
 
 }
