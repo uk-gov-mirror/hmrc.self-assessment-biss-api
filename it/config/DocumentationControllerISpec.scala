@@ -24,7 +24,7 @@ import support.IntegrationBaseSpec
 
 import scala.util.Try
 
-class DocumentationISpec extends IntegrationBaseSpec {
+class DocumentationControllerISpec extends IntegrationBaseSpec {
 
   val apiDefinitionJson: JsValue = Json.parse("""
       |{
@@ -64,14 +64,6 @@ class DocumentationISpec extends IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/definition").get())
       response.status shouldBe Status.OK
       Json.parse(response.body) shouldBe apiDefinitionJson
-    }
-  }
-
-  "a RAML documentation request" must {
-    "return the documentation" in {
-      val response: WSResponse = await(buildRequest("/api/conf/2.0/application.raml").get())
-      response.status shouldBe Status.OK
-      response.body[String] should startWith("#%RAML 1.0")
     }
   }
 
