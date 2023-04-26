@@ -17,10 +17,10 @@
 package api.connectors
 
 import config.AppConfig
-import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
-import v2.connectors.MtdIdLookupOutcome
 
 import javax.inject.{Inject, Singleton}
+import uk.gov.hmrc.http.{HeaderCarrier, HttpClient}
+
 import scala.concurrent.{ExecutionContext, Future}
 
 @Singleton

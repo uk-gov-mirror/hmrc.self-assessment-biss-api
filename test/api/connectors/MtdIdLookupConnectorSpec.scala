@@ -19,7 +19,6 @@ package api.connectors
 import api.mocks.MockHttpClient
 import api.models.errors.InternalError
 import mocks.MockAppConfig
-import v2.connectors.MtdIdLookupOutcome
 
 import scala.concurrent.Future
 

@@ -16,11 +16,11 @@
 
 package api.connectors.httpparsers
 
+import api.connectors.MtdIdLookupOutcome
 import api.models.errors.{ClientNotAuthenticatedError, InternalError, InvalidBearerTokenError}
 import play.api.http.Status.{FORBIDDEN, OK, UNAUTHORIZED}
 import play.api.libs.json.{Reads, __}
 import uk.gov.hmrc.http.{HttpReads, HttpResponse}
-import v2.connectors.MtdIdLookupOutcome
 
 object MtdIdLookupHttpParser extends HttpParser {
 
