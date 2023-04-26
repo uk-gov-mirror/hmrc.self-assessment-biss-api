@@ -18,7 +18,7 @@ package v2.services
 
 import api.controllers.RequestContext
 import api.models.errors._
-import api.services.BaseService
+import api.services.{BaseService, ServiceOutcome}
 import cats.implicits._
 import v2.connectors.RetrieveBISSConnector
 import v2.models.requestData.RetrieveBISSRequest

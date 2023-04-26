@@ -16,11 +16,12 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
+import api.controllers.requestParsers.validators.Validator
 import api.models.domain.Nino
 import api.models.errors.{BadRequestError, ErrorWrapper, NinoFormatError, RuleIncorrectOrEmptyBodyError}
 import api.models.request.RawData
 import support.UnitSpec
-import v2.controllers.requestParsers.validators.Validator
 
 class RequestParserSpec extends UnitSpec {
 

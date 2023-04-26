@@ -16,6 +16,7 @@
 
 package v2.controllers.requestParsers.validators
 
+import api.controllers.requestParsers.validators.Validator
 import api.controllers.requestParsers.validators.validations.{BusinessIdValidation, NinoValidation, TaxYearValidation, TypeOfBusinessValidation}
 import api.models.errors.MtdError
 import config.FixedConfig

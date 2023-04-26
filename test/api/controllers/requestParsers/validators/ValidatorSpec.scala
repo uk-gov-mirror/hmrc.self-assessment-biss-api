@@ -21,7 +21,6 @@ import api.models.request.RawData
 import org.scalamock.scalatest.MockFactory
 import play.api.http.Status.BAD_REQUEST
 import support.UnitSpec
-import v2.controllers.requestParsers.validators.Validator
 
 class ValidatorSpec extends UnitSpec with MockFactory {
 

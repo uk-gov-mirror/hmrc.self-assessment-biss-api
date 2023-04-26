@@ -40,12 +40,12 @@ class RetrieveBISSConnector @Inject() (val http: HttpClient, val appConfig: AppC
     if (taxYear.useTaxYearSpecificApi) {
       get(
         uri = TaxYearSpecificIfsUri[RetrieveBISSResponse](
-          s"income-tax/income-sources/${taxYear.asTysDownstream}/${nino.nino}/$businessId/$incomeSourceType/biss"
+          s"income-tax/income-sources/${taxYear.asTysDownstream}/$nino/$businessId/$incomeSourceType/biss"
         )
       )
     } else {
       get(
-        uri = IfsUri[RetrieveBISSResponse](s"income-tax/income-sources/nino/${nino.nino}/$incomeSourceType/${taxYear.asDownstream}/biss"),
+        uri = IfsUri[RetrieveBISSResponse](s"income-tax/income-sources/nino/$nino/$incomeSourceType/${taxYear.asDownstream}/biss"),
         queryParams = Seq("incomeSourceId" -> businessId)
       )
     }
