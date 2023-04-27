@@ -22,7 +22,6 @@ import play.api.libs.json.Writes
 import uk.gov.hmrc.http.{HeaderCarrier, HttpClient, HttpReads}
 import utils.Logging
 import DownstreamUri.{DesUri, IfsUri, TaxYearSpecificIfsUri}
-import v2.connectors.DownstreamOutcome
 
 import scala.concurrent.{ExecutionContext, Future}
 

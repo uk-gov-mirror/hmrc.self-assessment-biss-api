@@ -16,6 +16,7 @@
 
 package api.connectors.httpparsers
 
+import api.connectors.MtdIdLookupOutcome
 import api.connectors.httpparsers.MtdIdLookupHttpParser.mtdIdLookupHttpReads
 import api.models.errors.{ClientNotAuthenticatedError, InternalError, InvalidBearerTokenError}
 import play.api.libs.json.Writes.StringWrites
@@ -23,7 +24,6 @@ import play.api.libs.json.{JsObject, Json}
 import play.api.test.Helpers.{FORBIDDEN, INTERNAL_SERVER_ERROR, OK, UNAUTHORIZED}
 import support.UnitSpec
 import uk.gov.hmrc.http.HttpResponse
-import v2.connectors.MtdIdLookupOutcome
 
 class MtdIdLookupHttpParserSpec extends UnitSpec {
 

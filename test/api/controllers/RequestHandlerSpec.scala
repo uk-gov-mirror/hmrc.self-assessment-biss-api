@@ -16,6 +16,7 @@
 
 package api.controllers
 
+import api.controllers.requestParsers.RequestParser
 import api.mocks.MockIdGenerator
 import api.mocks.services.MockAuditService
 import api.models.audit.{AuditError, AuditEvent, AuditResponse, GenericAuditDetail}
@@ -23,6 +24,7 @@ import api.models.auth.UserDetails
 import api.models.errors.{ErrorWrapper, NinoFormatError}
 import api.models.outcomes.ResponseWrapper
 import api.models.request.RawData
+import api.services.ServiceOutcome
 import org.scalamock.handlers.CallHandler
 import play.api.http.{HeaderNames, Status}
 import play.api.libs.json.{JsString, Json, OWrites}
@@ -31,8 +33,6 @@ import play.api.test.{FakeRequest, ResultExtractors}
 import support.UnitSpec
 import uk.gov.hmrc.http.HeaderCarrier
 import uk.gov.hmrc.play.audit.http.connector.AuditResult
-import v2.controllers.requestParsers.RequestParser
-import v2.services.ServiceOutcome
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.{ExecutionContext, Future}

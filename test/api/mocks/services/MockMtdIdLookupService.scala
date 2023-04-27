@@ -16,11 +16,11 @@
 
 package api.mocks.services
 
+import api.connectors.MtdIdLookupOutcome
 import api.services.MtdIdLookupService
 import org.scalamock.handlers.CallHandler
 import org.scalamock.scalatest.MockFactory
 import uk.gov.hmrc.http.HeaderCarrier
-import v2.connectors.MtdIdLookupOutcome
 
 import scala.concurrent.{ExecutionContext, Future}
 

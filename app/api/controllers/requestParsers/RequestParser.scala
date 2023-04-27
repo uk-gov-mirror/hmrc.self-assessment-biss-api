@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v2.controllers.requestParsers
+package api.controllers.requestParsers
 
+import api.controllers.requestParsers.validators.Validator
 import api.models.errors.{BadRequestError, ErrorWrapper}
 import api.models.request.RawData
 import utils.Logging
-import v2.controllers.requestParsers.validators.Validator
 
 trait RequestParser[Raw <: RawData, Request] extends Logging {
 

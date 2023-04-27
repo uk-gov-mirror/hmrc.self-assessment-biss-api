@@ -16,7 +16,9 @@
 
 package v2.controllers.requestParsers
 
+import api.controllers.requestParsers.RequestParser
 import api.models.domain.{Nino, TaxYear, TypeOfBusiness}
+
 import javax.inject.Inject
 import v2.controllers.requestParsers.validators.RetrieveBISSValidator
 import v2.models.requestData.{RetrieveBISSRawData, RetrieveBISSRequest}

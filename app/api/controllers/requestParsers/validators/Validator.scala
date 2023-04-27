@@ -14,14 +14,27 @@
  * limitations under the License.
  */
 
-package v2
+package api.controllers.requestParsers.validators
 
-import api.models.errors.{DownstreamError, MtdError}
-import api.models.outcomes.ResponseWrapper
+import api.models.errors.MtdError
+import api.models.request.RawData
 
-package object connectors {
+trait Validator[A <: RawData] {
 
-  type MtdIdLookupOutcome = Either[MtdError, String]
+  type ValidationLevel[T] = T => List[MtdError]
 
-  type DownstreamOutcome[A] = Either[ResponseWrapper[DownstreamError], ResponseWrapper[A]]
+  def validate(data: A): List[MtdError]
+
+  def run(validationSet: List[A => List[List[MtdError]]], data: A): List[MtdError] = {
+
+    validationSet match {
+      case Nil => List()
+      case thisLevel :: remainingLevels =>
+        thisLevel(data).flatten match {
+          case x if x.isEmpty => run(remainingLevels, data)
+          case x if x.nonEmpty => x
+        }
+    }
+  }
+
 }
