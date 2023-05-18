@@ -45,7 +45,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
       "valid request is made" in new NonTysTest {
         DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUrl, queryParams, OK, downstreamResponseJsonFull)
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
 
         response.json shouldBe responseJsonFull
         response.status shouldBe OK
@@ -55,7 +55,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
       "valid TYS request is made" in new TysTest {
         DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUrl, OK, downstreamResponseJsonFull)
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
 
         response.json shouldBe responseJsonFull
         response.status shouldBe OK
@@ -75,7 +75,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
 
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUrl, queryParams, OK, downstreamResponseJsonMin)
 
-          val response: WSResponse = await(request.get)
+          val response: WSResponse = await(request.get())
 
           response.json shouldBe responseJsonMin
           response.status shouldBe OK
@@ -88,7 +88,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
 
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUrl, OK, downstreamResponseJsonMin)
 
-          val response: WSResponse = await(request.get)
+          val response: WSResponse = await(request.get())
 
           response.json shouldBe responseJsonMin
           response.status shouldBe OK
@@ -110,7 +110,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
           override val businessId: String     = requestBusinessId
           override val typeOfBusiness: String = requestTypeOfBusiness
 
-          val response: WSResponse = await(request.get)
+          val response: WSResponse = await(request.get())
 
           response.json shouldBe Json.toJson(expectedBody)
           response.status shouldBe expectedStatus
@@ -140,7 +140,7 @@ class RetrieveBISSControllerISpec extends IntegrationBaseSpec with RetrieveBISSF
         s"downstream returns an $downstreamCode error and status $downstreamStatus" in new NonTysTest {
           DownstreamStub.onError(DownstreamStub.GET, downstreamUrl, queryParams, downstreamStatus, errorBody(downstreamCode))
 
-          val response: WSResponse = await(request.get)
+          val response: WSResponse = await(request.get())
 
           response.json shouldBe Json.toJson(expectedBody)
           response.status shouldBe expectedStatus
