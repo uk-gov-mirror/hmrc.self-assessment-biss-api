@@ -37,10 +37,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
       "return a valid Definition case class with endpoint version settings taken from configuration" in new Test {
         MockedAppConfig.apiStatus("2.0") returns "ALPHA"
         MockedAppConfig.endpointsEnabled("2.0") returns false
-        MockedAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
+        (MockedAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
           confidenceLevel = confidenceLevel,
           definitionEnabled = true,
-          authValidationEnabled = true) anyNumberOfTimes ()
+          authValidationEnabled = true)).anyNumberOfTimes()
 
         private val readScope  = "read:self-assessment"
         private val writeScope = "write:self-assessment"

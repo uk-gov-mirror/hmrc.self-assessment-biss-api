@@ -8,10 +8,10 @@ expenditure for a specified self-employment, UK property business, or foreign pr
 
 ## Requirements
 
-- Scala 2.12.x
-- Java 8
+- Scala 2.13.x
+- Java 11
 - sbt 1.7.x
-- [Service Manager](https://github.com/hmrc/service-manager)
+- [Service Manager](https://github.com/hmrc/sm2)
 
 ## Development Setup
 
