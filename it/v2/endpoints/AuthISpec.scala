@@ -44,8 +44,9 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
         .withHttpHeaders(
           (ACCEPT, "application/vnd.hmrc.2.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
-      )
+        )
     }
+
   }
 
   "Calling the GET self employment BISS endpoint" when {
@@ -60,7 +61,7 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
           MtdIdLookupStub.internalServerError(nino)
         }
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
         response.status shouldBe Status.INTERNAL_SERVER_ERROR
       }
     }
@@ -75,7 +76,7 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
           DownstreamStub.onSuccess(DownstreamStub.GET, downstreamUrl, Map("incomeSourceId" -> businessId), OK, downstreamResponseJsonMin)
         }
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
 
         response.status shouldBe OK
         response.header("Content-Type") shouldBe Some("application/json")
@@ -94,7 +95,7 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
           AuthStub.unauthorisedNotLoggedIn()
         }
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
         response.status shouldBe Status.FORBIDDEN
       }
     }
@@ -110,9 +111,10 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
           AuthStub.unauthorisedOther()
         }
 
-        val response: WSResponse = await(request.get)
+        val response: WSResponse = await(request.get())
         response.status shouldBe Status.FORBIDDEN
       }
     }
   }
+
 }
