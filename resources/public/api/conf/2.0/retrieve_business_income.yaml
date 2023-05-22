@@ -82,6 +82,8 @@ get:
               $ref: './common/errors.yaml#/components/examples/ruleTaxYearNotSupported'
             RULE_NO_INCOME_SUBMISSIONS_EXIST:
               $ref: './common/errors.yaml#/components/examples/noIncomeSubmissionsExist'
+            RULE_INCORRECT_GOV_TEST_SCENARIO:
+              $ref: './common/errors.yaml#/components/examples/ruleIncorrectGovTestScenario'
     "403":
       description: Forbidden
       content:
