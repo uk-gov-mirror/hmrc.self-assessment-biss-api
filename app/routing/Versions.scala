@@ -17,7 +17,7 @@
 package routing
 
 import play.api.http.HeaderNames.ACCEPT
-import play.api.libs.json.{Format, JsError, JsResult, JsSuccess, JsValue, Json, Reads, Writes}
+import play.api.libs.json._
 import play.api.mvc.RequestHeader
 
 object Version {
@@ -35,7 +35,7 @@ object Version {
     override def reads(version: JsValue): JsResult[Version] =
       version.validate[String].flatMap {
         case Version2.name => JsSuccess(Version2)
-        case _             => JsError("Unrecognised version")
+        case _ => JsError("Unrecognised version")
       }
 
   }
@@ -52,7 +52,7 @@ sealed trait Version {
 }
 
 case object Version2 extends Version {
-  val name       = "2.0"
+  val name = "2.0"
   val configName = "2"
 }
 
@@ -79,5 +79,7 @@ object Versions {
 }
 
 sealed trait GetFromRequestError
-case object InvalidHeader   extends GetFromRequestError
+
+case object InvalidHeader extends GetFromRequestError
+
 case object VersionNotFound extends GetFromRequestError

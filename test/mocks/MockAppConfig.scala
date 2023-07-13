@@ -29,15 +29,21 @@ trait MockAppConfig extends MockFactory {
   object MockedAppConfig {
 
     // DES Config
-    def desBaseUrl: CallHandler[String]                         = (() => mockAppConfig.desBaseUrl).expects()
-    def desToken: CallHandler[String]                           = (() => mockAppConfig.desToken).expects()
-    def desEnvironment: CallHandler[String]                     = (() => mockAppConfig.desEnv).expects()
+    def desBaseUrl: CallHandler[String] = (() => mockAppConfig.desBaseUrl).expects()
+
+    def desToken: CallHandler[String] = (() => mockAppConfig.desToken).expects()
+
+    def desEnvironment: CallHandler[String] = (() => mockAppConfig.desEnv).expects()
+
     def desEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.desEnvironmentHeaders).expects()
 
     // IFS Config
-    def ifsBaseUrl: CallHandler[String]                         = (() => mockAppConfig.ifsBaseUrl).expects()
-    def ifsToken: CallHandler[String]                           = (() => mockAppConfig.ifsToken).expects()
-    def ifsEnvironment: CallHandler[String]                     = (() => mockAppConfig.ifsEnv).expects()
+    def ifsBaseUrl: CallHandler[String] = (() => mockAppConfig.ifsBaseUrl).expects()
+
+    def ifsToken: CallHandler[String] = (() => mockAppConfig.ifsToken).expects()
+
+    def ifsEnvironment: CallHandler[String] = (() => mockAppConfig.ifsEnv).expects()
+
     def ifsEnvironmentHeaders: CallHandler[Option[Seq[String]]] = (() => mockAppConfig.ifsEnvironmentHeaders).expects()
 
     // TYS IFS Config

@@ -27,20 +27,20 @@ import play.core.DefaultWebCommands
 import javax.inject.{Inject, Singleton}
 
 @Singleton
-class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingMap,
-                                              errorHandler: HttpErrorHandler,
-                                              httpConfiguration: HttpConfiguration,
-                                              config: AppConfig,
-                                              filters: HttpFilters,
-                                              action: DefaultActionBuilder)
-    extends DefaultHttpRequestHandler(
-      webCommands = new DefaultWebCommands,
-      optDevContext = None,
-      router = versionRoutingMap.defaultRouter,
-      errorHandler = errorHandler,
-      configuration = httpConfiguration,
-      filters = filters.filters
-    ) {
+class VersionRoutingRequestHandler @Inject()(versionRoutingMap: VersionRoutingMap,
+                                             errorHandler: HttpErrorHandler,
+                                             httpConfiguration: HttpConfiguration,
+                                             config: AppConfig,
+                                             filters: HttpFilters,
+                                             action: DefaultActionBuilder)
+  extends DefaultHttpRequestHandler(
+    webCommands = new DefaultWebCommands,
+    optDevContext = None,
+    router = versionRoutingMap.defaultRouter,
+    errorHandler = errorHandler,
+    configuration = httpConfiguration,
+    filters = filters.filters
+  ) {
 
   private val unsupportedVersionAction = action(Results.NotFound(Json.toJson(UnsupportedVersionError)))
 
@@ -54,7 +54,7 @@ class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingM
 
     def apiHandler: Option[Handler] = Some(
       Versions.getFromRequest(request) match {
-        case Left(InvalidHeader)   => invalidAcceptHeaderError
+        case Left(InvalidHeader) => invalidAcceptHeaderError
         case Left(VersionNotFound) => unsupportedVersionAction
 
         case Right(version) => findRoute(request, version) getOrElse resourceNotFoundAction
@@ -85,7 +85,7 @@ class VersionRoutingRequestHandler @Inject() (versionRoutingMap: VersionRoutingM
       .handlerFor(request)
       .orElse {
         if (request.path.endsWith("/")) {
-          val pathWithoutSlash        = request.path.dropRight(1)
+          val pathWithoutSlash = request.path.dropRight(1)
           val requestWithModifiedPath = request.withTarget(request.target.withPath(pathWithoutSlash))
           router.handlerFor(requestWithModifiedPath)
         } else {

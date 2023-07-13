@@ -24,11 +24,11 @@ import v2.models.requestData.{RetrieveBISSRawData, RetrieveBISSRequest}
 
 class RetrieveBISSRequestDataParserSpec extends UnitSpec {
 
-  private val nino                      = "AA123456B"
-  private val taxYear                   = "2018-19"
+  private val nino = "AA123456B"
+  private val taxYear = "2018-19"
   private val taxYearForForeignProperty = "2019-20"
-  private val typeOfBusiness            = "uk-property-fhl"
-  private val businessId                = "XAIS12345678910"
+  private val typeOfBusiness = "uk-property-fhl"
+  private val businessId = "XAIS12345678910"
 
   implicit val correlationId: String = "a1e8057e-fbbc-47a8-a8b4-78d9f015c253"
 

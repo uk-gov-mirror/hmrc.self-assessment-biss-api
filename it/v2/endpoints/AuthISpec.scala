@@ -29,10 +29,8 @@ import v2.stubs.{AuditStub, AuthStub, DownstreamStub, MtdIdLookupStub}
 class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
 
   private trait Test {
-    val nino               = "AA123456A"
+    val nino = "AA123456A"
     val businessId: String = "XAIS12345678913"
-
-    def uri: String = s"/$nino/self-employment/2018-19/$businessId"
 
     def downstreamUrl: String = s"/income-tax/income-sources/nino/$nino/self-employment/2019/biss"
 
@@ -46,6 +44,8 @@ class AuthISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
+
+    def uri: String = s"/$nino/self-employment/2018-19/$businessId"
 
   }
 

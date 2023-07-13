@@ -22,7 +22,7 @@ import support.UnitSpec
 class TaxYearValidationSpec extends UnitSpec {
 
   val minTaxYear = 2018
-  val taxYear    = "2017-18"
+  val taxYear = "2017-18"
 
   "validate" should {
     "return no errors" when {

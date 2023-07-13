@@ -21,14 +21,16 @@ import support.UnitSpec
 
 class ProfitSpec extends UnitSpec {
 
-  val json = Json.parse("""
+  val json = Json.parse(
+    """
       |{
       |        "net": 0.00,
       |        "taxable": 35.00
       |}
       |""".stripMargin)
 
-  val desJson = Json.parse("""
+  val desJson = Json.parse(
+    """
       |{
       |    "netProfit": 0,
       |    "taxableProfit": 35.00

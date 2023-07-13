@@ -26,7 +26,7 @@ case class ResultWrapper(httpStatus: Int, body: Option[JsValue]) {
   def asResult: Result = {
     body match {
       case Some(b) => Results.Status(httpStatus)(b)
-      case None    => Result(header = ResponseHeader(httpStatus), body = HttpEntity.NoEntity)
+      case None => Result(header = ResponseHeader(httpStatus), body = HttpEntity.NoEntity)
     }
   }
 
@@ -43,7 +43,7 @@ object ResultCreator {
     (_: InputRaw, _, _: Output) => ResultWrapper(successStatus, None)
 
   def plainJson[InputRaw <: RawData, Input, Output](successStatus: Int = Status.OK)(implicit
-      ws: Writes[Output]): ResultCreator[InputRaw, Input, Output] =
+                                                                                    ws: Writes[Output]): ResultCreator[InputRaw, Input, Output] =
     (_: InputRaw, input, output: Output) => ResultWrapper(successStatus, Some(Json.toJson(output)))
 
 }

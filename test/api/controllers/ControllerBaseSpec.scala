@@ -44,8 +44,9 @@ class ControllerBaseSpec extends UnitSpec with Status with MimeTypes with Header
   def fakePostRequest[T](body: T): FakeRequest[T] = fakeRequest.withBody(body)
 }
 
-trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator { _: ControllerBaseSpec =>
-  protected val nino: String  = validNino
+trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLookupService with MockIdGenerator {
+  _: ControllerBaseSpec =>
+  protected val nino: String = validNino
   protected val correlationId = "X-123"
 
   trait ControllerTest {
@@ -63,7 +64,7 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
 
       maybeExpectedResponseBody match {
         case Some(jsBody) => contentAsJson(result) shouldBe jsBody
-        case None         => contentType(result) shouldBe empty
+        case None => contentType(result) shouldBe empty
       }
     }
 
@@ -92,14 +93,14 @@ trait ControllerTestRunner extends MockEnrolmentsAuthService with MockMtdIdLooku
       checkAuditOkEvent(expectedStatus, maybeAuditRequestBody, maybeAuditResponseBody)
     }
 
-    protected def runErrorTestWithAudit(expectedError: MtdError, maybeAuditRequestBody: Option[JsValue] = None): Unit = {
-      runErrorTest(expectedError)
-      checkAuditErrorEvent(expectedError, maybeAuditRequestBody)
-    }
-
     protected def checkAuditOkEvent(expectedStatus: Int, maybeRequestBody: Option[JsValue], maybeAuditResponseBody: Option[JsValue]): Unit = {
       val auditResponse: AuditResponse = AuditResponse(expectedStatus, None, maybeAuditResponseBody)
       MockedAuditService.verifyAuditEvent(event(auditResponse, maybeRequestBody)).once()
+    }
+
+    protected def runErrorTestWithAudit(expectedError: MtdError, maybeAuditRequestBody: Option[JsValue] = None): Unit = {
+      runErrorTest(expectedError)
+      checkAuditErrorEvent(expectedError, maybeAuditRequestBody)
     }
 
     protected def checkAuditErrorEvent(expectedError: MtdError, maybeRequestBody: Option[JsValue]): Unit = {

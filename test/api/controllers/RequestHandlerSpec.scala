@@ -40,38 +40,40 @@ import scala.concurrent.{ExecutionContext, Future}
 class RequestHandlerSpec extends UnitSpec with MockAuditService with MockIdGenerator with Status with HeaderNames with ResultExtractors {
 
   private val successResponseJson = Json.obj("result" -> "SUCCESS!")
-  private val successCode         = Status.ACCEPTED
+  private val successCode = Status.ACCEPTED
 
   private val generatedCorrelationId = "generatedCorrelationId"
-  private val serviceCorrelationId   = "serviceCorrelationId"
-
-  case object InputRaw extends RawData
-  case object Input
-  case object Output { implicit val writes: OWrites[Output.type] = _ => successResponseJson }
+  private val serviceCorrelationId = "serviceCorrelationId"
+  private val userDetails = UserDetails("mtdId", "Individual", Some("agentReferenceNumber"))
+  private val mockService = mock[DummyService]
+  private val mockParser = mock[RequestParser[InputRaw.type, Input.type]]
 
   MockIdGenerator.generateCorrelationId.returns(generatedCorrelationId).anyNumberOfTimes()
 
   implicit val endpointLogContext: EndpointLogContext =
     EndpointLogContext(controllerName = "SomeController", endpointName = "someEndpoint")
 
-  implicit val hc: HeaderCarrier                    = HeaderCarrier()
-  implicit val ctx: RequestContext                  = RequestContext.from(mockIdGenerator, endpointLogContext)
-  private val userDetails                           = UserDetails("mtdId", "Individual", Some("agentReferenceNumber"))
+  implicit val hc: HeaderCarrier = HeaderCarrier()
+  implicit val ctx: RequestContext = RequestContext.from(mockIdGenerator, endpointLogContext)
+
+  private def service =
+    (mockService.service(_: Input.type)(_: RequestContext, _: ExecutionContext)).expects(Input, *, *)
   implicit val userRequest: UserRequest[AnyContent] = UserRequest[AnyContent](userDetails, FakeRequest())
+
+  private def parseRequest =
+    (mockParser.parseRequest(_: InputRaw.type)(_: String)).expects(InputRaw, *)
 
   trait DummyService {
     def service(input: Input.type)(implicit ctx: RequestContext, ec: ExecutionContext): Future[ServiceOutcome[Output.type]]
   }
 
-  private val mockService = mock[DummyService]
+  case object InputRaw extends RawData
 
-  private def service =
-    (mockService.service(_: Input.type)(_: RequestContext, _: ExecutionContext)).expects(Input, *, *)
+  case object Input
 
-  private val mockParser = mock[RequestParser[InputRaw.type, Input.type]]
-
-  private def parseRequest =
-    (mockParser.parseRequest(_: InputRaw.type)(_: String)).expects(InputRaw, *)
+  case object Output {
+    implicit val writes: OWrites[Output.type] = _ => successResponseJson
+  }
 
   "RequestHandler" when {
     "a request is successful" must {
@@ -148,7 +150,7 @@ class RequestHandlerSpec extends UnitSpec with MockAuditService with MockIdGener
       val params = Map("param" -> "value")
 
       val auditType = "type"
-      val txName    = "txName"
+      val txName = "txName"
 
       val requestBody = Some(JsString("REQUEST BODY"))
 

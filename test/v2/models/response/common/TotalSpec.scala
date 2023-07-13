@@ -21,7 +21,8 @@ import support.UnitSpec
 
 class TotalSpec extends UnitSpec {
 
-  val json: JsValue = Json.parse("""
+  val json: JsValue = Json.parse(
+    """
       |{
       |        "income": 100.00,
       |        "expenses": 50.00,
@@ -31,7 +32,8 @@ class TotalSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val desJson: JsValue = Json.parse("""
+  val desJson: JsValue = Json.parse(
+    """
       |{
       |    "incomeSourceID": "string",
       |    "totalIncome": 100.00,
@@ -42,13 +44,15 @@ class TotalSpec extends UnitSpec {
       |}
       |""".stripMargin)
 
-  val minDesJson: JsValue = Json.parse("""
+  val minDesJson: JsValue = Json.parse(
+    """
       |{
       |    "totalIncome": 100.00
       |}
       |""".stripMargin)
 
-  val minJson: JsValue = Json.parse("""
+  val minJson: JsValue = Json.parse(
+    """
       |{
       |    "income": 100.00
       |}

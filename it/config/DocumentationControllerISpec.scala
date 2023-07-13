@@ -18,7 +18,7 @@ package config
 
 import io.swagger.v3.parser.OpenAPIV3Parser
 import play.api.http.Status
-import play.api.libs.json.{Json, JsValue}
+import play.api.libs.json.{JsValue, Json}
 import play.api.libs.ws.WSResponse
 import support.IntegrationBaseSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
@@ -27,39 +27,40 @@ import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
-  val config: AppConfig                = app.injector.instanceOf[AppConfig]
+  val config: AppConfig = app.injector.instanceOf[AppConfig]
   val confidenceLevel: ConfidenceLevel = config.confidenceLevelConfig.confidenceLevel
 
-  val apiDefinitionJson: JsValue = Json.parse(s"""
-      |{
-      |  "scopes":[
-      |    {
-      |      "key":"read:self-assessment",
-      |      "name":"View your Self Assessment information",
-      |      "description":"Allow read access to self assessment data",
-      |      "confidenceLevel": $confidenceLevel
-      |    },
-      |    {
-      |      "key":"write:self-assessment",
-      |      "name":"Change your Self Assessment information",
-      |      "description":"Allow write access to self assessment data",
-      |      "confidenceLevel": $confidenceLevel
-      |    }
-      |  ],
-      |  "api":{
-      |    "name":"Business Income Source Summary (MTD)",
-      |    "description":"An API for providing Business Income Source Summary data",
-      |    "context":"individuals/self-assessment/income-summary",
-      |    "categories":["INCOME_TAX_MTD"],
-      |    "versions":[
-      |      {
-      |        "version":"2.0",
-      |        "status":"BETA",
-      |        "endpointsEnabled":true
-      |      }
-      |    ]
-      |  }
-      |}
+  val apiDefinitionJson: JsValue = Json.parse(
+    s"""
+       |{
+       |  "scopes":[
+       |    {
+       |      "key":"read:self-assessment",
+       |      "name":"View your Self Assessment information",
+       |      "description":"Allow read access to self assessment data",
+       |      "confidenceLevel": $confidenceLevel
+       |    },
+       |    {
+       |      "key":"write:self-assessment",
+       |      "name":"Change your Self Assessment information",
+       |      "description":"Allow write access to self assessment data",
+       |      "confidenceLevel": $confidenceLevel
+       |    }
+       |  ],
+       |  "api":{
+       |    "name":"Business Income Source Summary (MTD)",
+       |    "description":"An API for providing Business Income Source Summary data",
+       |    "context":"individuals/self-assessment/income-summary",
+       |    "categories":["INCOME_TAX_MTD"],
+       |    "versions":[
+       |      {
+       |        "version":"2.0",
+       |        "status":"BETA",
+       |        "endpointsEnabled":true
+       |      }
+       |    ]
+       |  }
+       |}
     """.stripMargin)
 
   "GET /api/definition" should {
@@ -76,7 +77,7 @@ class DocumentationControllerISpec extends IntegrationBaseSpec {
       val response: WSResponse = await(buildRequest("/api/conf/2.0/application.yaml").get())
       response.status shouldBe Status.OK
 
-      val contents     = response.body[String]
+      val contents = response.body[String]
       val parserResult = Try(new OpenAPIV3Parser().readContents(contents))
       parserResult.isSuccess shouldBe true
 
