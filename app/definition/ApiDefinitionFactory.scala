@@ -18,23 +18,19 @@ package definition
 
 import config.AppConfig
 import routing.{Version, Version2}
-
-import javax.inject.{Inject, Singleton}
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 import utils.Logging
 
-@Singleton
-class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
+import javax.inject.{Inject, Singleton}
 
-  private val readScope  = "read:self-assessment"
-  private val writeScope = "write:self-assessment"
+@Singleton
+class ApiDefinitionFactory @Inject()(appConfig: AppConfig) extends Logging {
 
   lazy val confidenceLevel: ConfidenceLevel = {
     val clConfig = appConfig.confidenceLevelConfig
 
     if (clConfig.definitionEnabled) clConfig.confidenceLevel else ConfidenceLevel.L50
   }
-
   lazy val definition: Definition =
     Definition(
       scopes = Seq(
@@ -66,6 +62,8 @@ class ApiDefinitionFactory @Inject() (appConfig: AppConfig) extends Logging {
         requiresTrust = None
       )
     )
+  private val readScope = "read:self-assessment"
+  private val writeScope = "write:self-assessment"
 
   private[definition] def buildAPIStatus(version: Version): APIStatus = {
     APIStatus.parser

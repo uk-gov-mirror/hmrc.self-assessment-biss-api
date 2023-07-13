@@ -16,7 +16,7 @@
 
 package v2.controllers
 
-import api.controllers.{AuthorisedController, EndpointLogContext, RequestContext, RequestHandler, ResultCreator}
+import api.controllers._
 import api.services.{EnrolmentsAuthService, MtdIdLookupService}
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
 import utils.{IdGenerator, Logging}
@@ -27,13 +27,13 @@ import v2.services.RetrieveBISSService
 import javax.inject.Inject
 import scala.concurrent.ExecutionContext
 
-class RetrieveBISSController @Inject() (val authService: EnrolmentsAuthService,
-                                        val lookupService: MtdIdLookupService,
-                                        requestParser: RetrieveBISSRequestDataParser,
-                                        service: RetrieveBISSService,
-                                        cc: ControllerComponents,
-                                        val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
-    extends AuthorisedController(cc)
+class RetrieveBISSController @Inject()(val authService: EnrolmentsAuthService,
+                                       val lookupService: MtdIdLookupService,
+                                       requestParser: RetrieveBISSRequestDataParser,
+                                       service: RetrieveBISSService,
+                                       cc: ControllerComponents,
+                                       val idGenerator: IdGenerator)(implicit ec: ExecutionContext)
+  extends AuthorisedController(cc)
     with Logging {
 
   implicit val endpointLogContext: EndpointLogContext =

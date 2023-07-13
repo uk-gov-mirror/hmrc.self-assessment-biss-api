@@ -25,6 +25,8 @@ sealed trait TypeOfBusiness {
 
 object TypeOfBusiness {
 
+  val parser: PartialFunction[String, TypeOfBusiness] = Enums.parser[TypeOfBusiness]
+
   case object `uk-property-non-fhl` extends TypeOfBusiness {
     override def toIncomeSourceType: IncomeSourceType = IncomeSourceType.`uk-property`
   }
@@ -44,6 +46,4 @@ object TypeOfBusiness {
   case object `self-employment` extends TypeOfBusiness {
     override def toIncomeSourceType: IncomeSourceType = IncomeSourceType.`self-employment`
   }
-
-  val parser: PartialFunction[String, TypeOfBusiness] = Enums.parser[TypeOfBusiness]
 }

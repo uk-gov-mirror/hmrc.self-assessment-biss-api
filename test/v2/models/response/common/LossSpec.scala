@@ -16,19 +16,21 @@
 
 package v2.models.response.common
 
-import support.UnitSpec
 import play.api.libs.json.Json
+import support.UnitSpec
 
 class LossSpec extends UnitSpec {
 
-  val json = Json.parse("""
+  val json = Json.parse(
+    """
       |{
       |        "net": 0.00,
       |        "taxable": 35.00
       |}
       |""".stripMargin)
 
-  val desJson = Json.parse("""
+  val desJson = Json.parse(
+    """
       |{
       |    "netLoss": 0,
       |    "taxableLoss": 35.00

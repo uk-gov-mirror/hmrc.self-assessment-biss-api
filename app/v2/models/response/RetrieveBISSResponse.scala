@@ -16,9 +16,9 @@
 
 package v2.models.response
 
-import v2.models.response.common._
-import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
+import v2.models.response.common._
 
 case class RetrieveBISSResponse(total: Total, profit: Option[Profit], loss: Option[Loss])
 
@@ -28,13 +28,13 @@ object RetrieveBISSResponse {
     JsPath.read[Total] and
       JsPath.readNullable[Profit].map {
         case Some(Profit(None, None)) => None
-        case obj                      => obj
+        case obj => obj
       } and
       JsPath.readNullable[Loss].map {
         case Some(Loss(None, None)) => None
-        case obj                    => obj
+        case obj => obj
       }
-  )(RetrieveBISSResponse.apply _)
+    ) (RetrieveBISSResponse.apply _)
 
   implicit val writes: OWrites[RetrieveBISSResponse] = Json.writes[RetrieveBISSResponse]
 

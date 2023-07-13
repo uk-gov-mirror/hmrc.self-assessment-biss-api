@@ -27,11 +27,11 @@ import scala.concurrent.Future
 
 class RetrieveBISSConnectorSpec extends ConnectorSpec {
 
-  val taxYearMtd        = "2018-19"
+  val taxYearMtd = "2018-19"
   val taxYearDownstream = "2019"
-  val taxYearTys        = "2023-24"
-  val nino              = "AA123456A"
-  val businessId        = "businessId"
+  val taxYearTys = "2023-24"
+  val nino = "AA123456A"
+  val businessId = "businessId"
 
   // WLOG
   val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(100.00, None, None, None, None), None, None)
@@ -63,7 +63,7 @@ class RetrieveBISSConnectorSpec extends ConnectorSpec {
         }
 
         s"businessType is $typeOfBusiness and TYS" in new TysIfsTest with Test {
-          val expectedUrl                  = s"$baseUrl/income-tax/income-sources/23-24/$nino/$businessId/$incomeSourceTypePathParam/biss"
+          val expectedUrl = s"$baseUrl/income-tax/income-sources/23-24/$nino/$businessId/$incomeSourceTypePathParam/biss"
           val request: RetrieveBISSRequest = RetrieveBISSRequest(Nino(nino), typeOfBusiness, TaxYear.fromMtd(taxYearTys), businessId)
 
           val expected: Right[Nothing, ResponseWrapper[RetrieveBISSResponse]] = Right(ResponseWrapper(correlationId, response))

@@ -18,19 +18,7 @@ package v2.services
 
 import api.controllers.EndpointLogContext
 import api.models.domain.{Nino, TaxYear, TypeOfBusiness}
-import api.models.errors.{
-  BusinessIdFormatError,
-  DownstreamErrorCode,
-  DownstreamErrors,
-  ErrorWrapper,
-  InternalError,
-  MtdError,
-  NinoFormatError,
-  NotFoundError,
-  RuleNoIncomeSubmissionsExist,
-  RuleTaxYearNotSupportedError,
-  TaxYearFormatError
-}
+import api.models.errors.{BusinessIdFormatError, DownstreamErrorCode, DownstreamErrors, ErrorWrapper, InternalError, MtdError, NinoFormatError, NotFoundError, RuleNoIncomeSubmissionsExist, RuleTaxYearNotSupportedError, TaxYearFormatError}
 import api.models.outcomes.ResponseWrapper
 import api.services.ServiceSpec
 import org.scalatest.concurrent.ScalaFutures.convertScalaFuture
@@ -45,7 +33,7 @@ class RetrieveBISSServiceSpec extends ServiceSpec {
 
   // WLOG
   private val requestData = RetrieveBISSRequest(Nino("AA123456A"), TypeOfBusiness.`foreign-property`, TaxYear.fromMtd("2019-20"), "XAIS12345678910")
-  private val response    = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
+  private val response = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
 
   implicit val loggingContext: EndpointLogContext = EndpointLogContext("controller", "endpoint")
 
@@ -77,27 +65,27 @@ class RetrieveBISSServiceSpec extends ServiceSpec {
         }
 
       val errors = Seq(
-        "INVALID_IDVALUE"              -> NinoFormatError,
-        "INVALID_TAXYEAR"              -> TaxYearFormatError,
-        "INVALID_IDTYPE"               -> InternalError,
-        "INVALID_CORRELATIONID"        -> InternalError,
-        "INVALID_INCOMESOURCETYPE"     -> InternalError,
-        "INVALID_INCOMESOURCEID"       -> BusinessIdFormatError,
+        "INVALID_IDVALUE" -> NinoFormatError,
+        "INVALID_TAXYEAR" -> TaxYearFormatError,
+        "INVALID_IDTYPE" -> InternalError,
+        "INVALID_CORRELATIONID" -> InternalError,
+        "INVALID_INCOMESOURCETYPE" -> InternalError,
+        "INVALID_INCOMESOURCEID" -> BusinessIdFormatError,
         "INCOME_SUBMISSIONS_NOT_EXIST" -> RuleNoIncomeSubmissionsExist,
-        "INVALID_ACCOUNTING_PERIOD"    -> InternalError,
-        "INVALID_QUERY_PARAM"          -> InternalError,
-        "NOT_FOUND"                    -> NotFoundError,
-        "SERVER_ERROR"                 -> InternalError,
-        "SERVICE_UNAVAILABLE"          -> InternalError
+        "INVALID_ACCOUNTING_PERIOD" -> InternalError,
+        "INVALID_QUERY_PARAM" -> InternalError,
+        "NOT_FOUND" -> NotFoundError,
+        "SERVER_ERROR" -> InternalError,
+        "SERVICE_UNAVAILABLE" -> InternalError
       )
 
       val extraTysErrors = Seq(
-        "INVALID_TAX_YEAR"          -> TaxYearFormatError,
-        "INVALID_INCOMESOURCE_ID"   -> BusinessIdFormatError,
-        "INVALID_CORRELATION_ID"    -> InternalError,
+        "INVALID_TAX_YEAR" -> TaxYearFormatError,
+        "INVALID_INCOMESOURCE_ID" -> BusinessIdFormatError,
+        "INVALID_CORRELATION_ID" -> InternalError,
         "INVALID_TAXABLE_ENTITY_ID" -> NinoFormatError,
         "INVALID_INCOME_SOURCETYPE" -> InternalError,
-        "TAX_YEAR_NOT_SUPPORTED"    -> RuleTaxYearNotSupportedError
+        "TAX_YEAR_NOT_SUPPORTED" -> RuleTaxYearNotSupportedError
       )
 
       (errors ++ extraTysErrors).foreach(args => (serviceError _).tupled(args))

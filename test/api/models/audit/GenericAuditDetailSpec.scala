@@ -22,21 +22,22 @@ import support.UnitSpec
 
 class GenericAuditDetailSpec extends UnitSpec {
 
-  private val userType                      = "Organisation"
-  private val agentReferenceNumber          = Some("012345678")
-  private val nino                          = "AA123456A"
-  private val taxYear                       = "2017-18"
-  private val params: Map[String, String]   = Map("nino" -> nino, "taxYear" -> taxYear)
-  private val `X-CorrelationId`             = "X-123"
-  private val requestBody: Option[JsValue]  = Some(Json.parse("""{"field": "input"}"""))
+  private val userType = "Organisation"
+  private val agentReferenceNumber = Some("012345678")
+  private val nino = "AA123456A"
+  private val taxYear = "2017-18"
+  private val params: Map[String, String] = Map("nino" -> nino, "taxYear" -> taxYear)
+  private val `X-CorrelationId` = "X-123"
+  private val requestBody: Option[JsValue] = Some(Json.parse("""{"field": "input"}"""))
   private val responseBody: Option[JsValue] = Some(Json.parse("""{"field": "output"}"""))
-  private val responseSuccess               = AuditResponse(httpStatus = SEE_OTHER, errors = None, body = responseBody)
+  private val responseSuccess = AuditResponse(httpStatus = SEE_OTHER, errors = None, body = responseBody)
   private val responseFail = AuditResponse(httpStatus = BAD_REQUEST, errors = Some(Seq(AuditError("FORMAT_NINO"))), body = None)
 
   "writes" when {
     "passed an audit model with all fields provided" should {
       "produce valid json" in {
-        val json = Json.parse(s"""
+        val json = Json.parse(
+          s"""
              |{
              |  "userType": "Organisation",
              |  "agentReferenceNumber": "012345678",
@@ -70,7 +71,8 @@ class GenericAuditDetailSpec extends UnitSpec {
 
     "passed an audit model with only mandatory fields provided" should {
       "produce valid json" in {
-        val json = Json.parse(s"""
+        val json = Json.parse(
+          s"""
              |{
              |  "userType": "Organisation",
              |  "agentReferenceNumber": "012345678",

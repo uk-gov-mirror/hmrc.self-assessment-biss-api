@@ -28,6 +28,10 @@ trait WireMockMethods {
     new Mapping(method, uri, queryParams, headers, None)
   }
 
+  sealed trait HTTPMethod {
+    def wireMockMapping(pattern: UrlPattern): MappingBuilder
+  }
+
   class Mapping(method: HTTPMethod, uri: String, queryParams: Map[String, String], headers: Map[String, String], body: Option[String]) {
 
     private val mapping = {
@@ -43,21 +47,13 @@ trait WireMockMethods {
 
       body match {
         case Some(extractedBody) => uriMappingWithHeaders.withRequestBody(equalTo(extractedBody))
-        case None                => uriMappingWithHeaders
+        case None => uriMappingWithHeaders
       }
     }
 
     def thenReturn[T](status: Int, body: T)(implicit writes: Writes[T]): StubMapping = {
       val stringBody = writes.writes(body).toString()
       thenReturnInternal(status, Map.empty, Some(stringBody))
-    }
-
-    def thenReturn(status: Int, body: String): StubMapping = {
-      thenReturnInternal(status, Map.empty, Some(body))
-    }
-
-    def thenReturn(status: Int, headers: Map[String, String] = Map.empty): StubMapping = {
-      thenReturnInternal(status, headers, None)
     }
 
     private def thenReturnInternal(status: Int, headers: Map[String, String], body: Option[String]): StubMapping = {
@@ -68,17 +64,21 @@ trait WireMockMethods {
         }
         body match {
           case Some(extractedBody) => responseWithHeaders.withBody(extractedBody)
-          case None                => responseWithHeaders
+          case None => responseWithHeaders
         }
       }
 
       stubFor(mapping.willReturn(response))
     }
 
-  }
+    def thenReturn(status: Int, body: String): StubMapping = {
+      thenReturnInternal(status, Map.empty, Some(body))
+    }
 
-  sealed trait HTTPMethod {
-    def wireMockMapping(pattern: UrlPattern): MappingBuilder
+    def thenReturn(status: Int, headers: Map[String, String] = Map.empty): StubMapping = {
+      thenReturnInternal(status, headers, None)
+    }
+
   }
 
   case object POST extends HTTPMethod {

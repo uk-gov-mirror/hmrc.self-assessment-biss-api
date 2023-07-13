@@ -32,24 +32,22 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 class RetrieveBISSControllerSpec
-    extends ControllerBaseSpec
+  extends ControllerBaseSpec
     with ControllerTestRunner
     with MockRetrieveBISSRequestDataParser
     with MockRetrieveBISSService {
 
-  private val taxYear        = "2018-19"
-  private val typeOfBusiness = "uk-property-fhl"
-  private val businessId     = "someBusinessId"
-
   val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
-
-  val responseJson: JsValue = Json.parse("""{
+  val responseJson: JsValue = Json.parse(
+    """{
       |  "total": {
       |    "income": 100.00
       |  }
       |}""".stripMargin)
-
-  private val rawData     = RetrieveBISSRawData(nino, typeOfBusiness, taxYear, businessId)
+  private val taxYear = "2018-19"
+  private val typeOfBusiness = "uk-property-fhl"
+  private val businessId = "someBusinessId"
+  private val rawData = RetrieveBISSRawData(nino, typeOfBusiness, taxYear, businessId)
   private val requestData = RetrieveBISSRequest(Nino(nino), TypeOfBusiness.`uk-property-fhl`, TaxYear.fromMtd(taxYear), businessId)
 
   "retrieveBiss" should {
