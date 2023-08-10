@@ -35,7 +35,8 @@
         }
       },
       "required": [
-        "income"
+        "income",
+        "expenses"
       ]
     },
     "profit": {
@@ -52,7 +53,11 @@
           "type": "number",
           "example": "0.00"
         }
-      }
+      },
+      "required": [
+        "net",
+        "taxable"
+      ]
     },
     "loss": {
       "type": "object",
@@ -68,10 +73,16 @@
           "type": "number",
           "example": "35.00"
         }
-      }
+      },
+      "required": [
+        "net",
+        "taxable"
+      ]
     }
   },
   "required": [
-    "total"
+    "total",
+    "profit",
+    "loss"
   ]
 }
