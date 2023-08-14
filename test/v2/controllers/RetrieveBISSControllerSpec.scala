@@ -26,7 +26,7 @@ import v2.mocks.requestParsers.MockRetrieveBISSRequestDataParser
 import v2.mocks.services.MockRetrieveBISSService
 import v2.models.requestData.{RetrieveBISSRawData, RetrieveBISSRequest}
 import v2.models.response.RetrieveBISSResponse
-import v2.models.response.common.Total
+import v2.models.response.common.{Loss, Profit, Total}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
@@ -37,11 +37,20 @@ class RetrieveBISSControllerSpec
     with MockRetrieveBISSRequestDataParser
     with MockRetrieveBISSService {
 
-  val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(income = 100.00, None, None, None, None), None, None)
+  val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(income = 100.00, expenses = 50.0, None, None, None), Profit(net = 0.0, taxable = 0.0), Loss(net = 50.0, taxable = 0.0))
   val responseJson: JsValue = Json.parse(
     """{
       |  "total": {
-      |    "income": 100.00
+      |    "income": 100.00,
+      |    "expenses": 50.00
+      |  },
+      |  "loss": {
+      |    "net": 50.0,
+      |    "taxable": 0.00
+      |  },
+      |  "profit": {
+      |    "net": 0.00,
+      |    "taxable": 0.00
       |  }
       |}""".stripMargin)
   private val taxYear = "2018-19"

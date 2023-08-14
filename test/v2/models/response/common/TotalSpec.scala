@@ -47,20 +47,22 @@ class TotalSpec extends UnitSpec {
   val minDesJson: JsValue = Json.parse(
     """
       |{
-      |    "totalIncome": 100.00
+      |    "totalIncome": 100.00,
+      |    "totalExpenses": 0.00
       |}
       |""".stripMargin)
 
   val minJson: JsValue = Json.parse(
     """
       |{
-      |    "income": 100.00
+      |    "income": 100.00,
+      |    "expenses": 0.0
       |}
       |""".stripMargin)
 
   val model: Total = Total(
     100.00,
-    Some(50.00),
+    50.00,
     Some(5.00),
     Some(60.00),
     Some(-30.00)
@@ -68,7 +70,7 @@ class TotalSpec extends UnitSpec {
 
   val minModel: Total = Total(
     100.00,
-    None,
+    0.00,
     None,
     None,
     None

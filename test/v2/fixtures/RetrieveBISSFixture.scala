@@ -47,7 +47,16 @@ trait RetrieveBISSFixture {
     """
       |{
       |  "total": {
-      |    "income": 100.00
+      |    "income": 100.50,
+      |    "expenses": 50.5
+      |  },
+      |  "profit": {
+      |    "net": 45.25,
+      |    "taxable": 0.50
+      |  },
+      |  "loss": {
+      |    "net": 50,
+      |    "taxable": 0.25 
       |  }
       |}
     """.stripMargin)
@@ -56,28 +65,26 @@ trait RetrieveBISSFixture {
     RetrieveBISSResponse(
       Total(
         income = 1.25,
-        expenses = Some(2.25),
+        expenses = 2.25,
         additions = Some(5.25),
         deductions = Some(6.25),
         accountingAdjustments = Some(7.25)
       ),
-      Some(
-        Profit(
-          net = Some(3.25),
-          taxable = Some(8.25)
-        )),
-      Some(
-        Loss(
-          net = Some(4.25),
-          taxable = Some(9.25)
-        ))
+      Profit(
+        net = 3.25,
+        taxable = 8.25
+      ),
+      Loss(
+        net = 4.25,
+        taxable = 9.25
+      )
     )
 
   val responseMin: RetrieveBISSResponse =
     RetrieveBISSResponse(
-      Total(income = 100.00, None, None, None, None),
-      None,
-      None
+      Total(income = 100.50, expenses = 50.5, None, None, None),
+      Profit(net = 45.25, taxable = 0.50),
+      Loss(net = 50.00, taxable = 0.25)
     )
 
   val downstreamResponseJsonFull: JsValue = Json.parse(
@@ -99,7 +106,13 @@ trait RetrieveBISSFixture {
   val downstreamResponseJsonMin: JsValue = Json.parse(
     """
       |{
-      | "totalIncome": 100.00
+      | "incomeSourceId": "XAIS12345678913",
+      | "totalIncome": 100.5,
+      | "totalExpenses": 50.5,
+      | "netProfit": 45.25,
+      | "netLoss": 50.0,
+      | "taxableProfit": 0.5,
+      | "taxableLoss": 0.25
       |}
     """.stripMargin)
 

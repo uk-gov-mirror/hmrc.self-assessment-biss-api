@@ -39,8 +39,8 @@ class LossSpec extends UnitSpec {
 
   val model =
     Loss(
-      Some(0),
-      Some(35.00)
+      0,
+      35.00
     )
 
   "Loss" should {

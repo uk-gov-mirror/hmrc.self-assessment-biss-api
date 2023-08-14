@@ -21,7 +21,7 @@ import api.models.domain.{Nino, TaxYear, TypeOfBusiness}
 import api.models.outcomes.ResponseWrapper
 import v2.models.requestData.RetrieveBISSRequest
 import v2.models.response.RetrieveBISSResponse
-import v2.models.response.common.Total
+import v2.models.response.common.{Loss, Profit, Total}
 
 import scala.concurrent.Future
 
@@ -34,7 +34,7 @@ class RetrieveBISSConnectorSpec extends ConnectorSpec {
   val businessId = "businessId"
 
   // WLOG
-  val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(100.00, None, None, None, None), None, None)
+  val response: RetrieveBISSResponse = RetrieveBISSResponse(Total(100.00, 50.0, None, None, None), Profit(0, 0), Loss(100.0, 0.0))
 
   trait Test {
     _: ConnectorTest =>
