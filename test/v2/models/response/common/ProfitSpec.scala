@@ -39,8 +39,8 @@ class ProfitSpec extends UnitSpec {
 
   val model =
     Profit(
-      Some(0),
-      Some(35.00)
+      0,
+      35.00
     )
 
   "Profit" should {

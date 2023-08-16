@@ -20,7 +20,7 @@ import play.api.libs.functional.syntax._
 import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
 case class Total(income: BigDecimal,
-                 expenses: Option[BigDecimal],
+                 expenses: BigDecimal,
                  additions: Option[BigDecimal],
                  deductions: Option[BigDecimal],
                  accountingAdjustments: Option[BigDecimal])
@@ -29,7 +29,7 @@ object Total {
 
   implicit val reads: Reads[Total] = (
     (JsPath \ "totalIncome").read[BigDecimal] and
-      (JsPath \ "totalExpenses").readNullable[BigDecimal] and
+      (JsPath \ "totalExpenses").read[BigDecimal] and
       (JsPath \ "totalAdditions").readNullable[BigDecimal] and
       (JsPath \ "totalDeductions").readNullable[BigDecimal] and
       (JsPath \ "accountingAdjustments").readNullable[BigDecimal]
