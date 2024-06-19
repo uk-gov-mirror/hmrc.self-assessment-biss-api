@@ -18,7 +18,7 @@ package definition
 
 import config.{ConfidenceLevelConfig, MockAppConfig}
 import definition.APIStatus._
-import routing.Version2
+import routing.{Version2, Version3}
 import support.UnitSpec
 import uk.gov.hmrc.auth.core.ConfidenceLevel
 
@@ -34,8 +34,10 @@ class ApiDefinitionFactorySpec extends UnitSpec {
   "definition" when {
     "called" should {
       "return a valid Definition case class with endpoint version settings taken from configuration" in new Test {
-        MockedAppConfig.apiStatus(Version2) returns "ALPHA"
-        MockedAppConfig.endpointsEnabled(Version2) returns false
+        List(Version2, Version3).foreach { version =>
+          MockedAppConfig.apiStatus(version) returns "ALPHA"
+          MockedAppConfig.endpointsEnabled(version) returns false
+        }
         (MockedAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
           confidenceLevel = confidenceLevel,
           definitionEnabled = true,
@@ -67,6 +69,11 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               versions = Seq(
                 APIVersion(
                   version = Version2,
+                  status = ALPHA,
+                  endpointsEnabled = false
+                ),
+                APIVersion(
+                  version = Version3,
                   status = ALPHA,
                   endpointsEnabled = false
                 )
