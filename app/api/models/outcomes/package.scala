@@ -14,21 +14,13 @@
  * limitations under the License.
  */
 
-package v2.models
+package api.models
 
-import org.json4s.CustomSerializer
-import org.json4s.JsonAST.JDecimal
+import api.models.auth.UserDetails
+import api.models.errors.MtdError
 
-package object response {
+package object outcomes {
 
-  object BigDecimalSerializer
-    extends CustomSerializer[BigDecimal](_ =>
-      ( {
-        case jde: JDecimal =>
-          jde.num
-      }, {
-        case bd: BigDecimal =>
-          JDecimal(bd.setScale(2, BigDecimal.RoundingMode.HALF_UP))
-      }))
+  type AuthOutcome = Either[MtdError, UserDetails]
 
 }
