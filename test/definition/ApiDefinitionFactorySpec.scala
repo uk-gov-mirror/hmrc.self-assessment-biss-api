@@ -16,15 +16,12 @@
 
 package definition
 
-import config.{ConfidenceLevelConfig, MockAppConfig}
+import config.MockAppConfig
 import definition.APIStatus._
 import routing.{Version2, Version3}
 import support.UnitSpec
-import uk.gov.hmrc.auth.core.ConfidenceLevel
 
 class ApiDefinitionFactorySpec extends UnitSpec {
-
-  private val confidenceLevel: ConfidenceLevel = ConfidenceLevel.L200
 
   class Test extends MockAppConfig {
     val apiDefinitionFactory = new ApiDefinitionFactory(mockAppConfig)
@@ -38,29 +35,9 @@ class ApiDefinitionFactorySpec extends UnitSpec {
           MockedAppConfig.apiStatus(version) returns "ALPHA"
           MockedAppConfig.endpointsEnabled(version) returns false
         }
-        (MockedAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
-          confidenceLevel = confidenceLevel,
-          definitionEnabled = true,
-          authValidationEnabled = true)).anyNumberOfTimes()
 
-        private val readScope  = "read:self-assessment"
-        private val writeScope = "write:self-assessment"
         apiDefinitionFactory.definition shouldBe
           Definition(
-            scopes = Seq(
-              Scope(
-                key = readScope,
-                name = "View your Self Assessment information",
-                description = "Allow read access to self assessment data",
-                confidenceLevel
-              ),
-              Scope(
-                key = writeScope,
-                name = "Change your Self Assessment information",
-                description = "Allow write access to self assessment data",
-                confidenceLevel
-              )
-            ),
             api = APIDefinition(
               name = "Business Income Source Summary (MTD)",
               description = "An API for providing Business Income Source Summary data",
@@ -81,24 +58,6 @@ class ApiDefinitionFactorySpec extends UnitSpec {
               requiresTrust = None
             )
           )
-      }
-    }
-  }
-
-  "confidenceLevel" when {
-    Seq(
-      (true, ConfidenceLevel.L250, ConfidenceLevel.L250),
-      (true, ConfidenceLevel.L200, ConfidenceLevel.L200),
-      (false, ConfidenceLevel.L200, ConfidenceLevel.L50)
-    ).foreach { case (definitionEnabled, configCL, expectedDefinitionCL) =>
-      s"confidence-level-check.definition.enabled is $definitionEnabled and confidence-level = $configCL" should {
-        s"return confidence level $expectedDefinitionCL" in new Test {
-          MockedAppConfig.confidenceLevelCheckEnabled returns ConfidenceLevelConfig(
-            confidenceLevel = configCL,
-            definitionEnabled = definitionEnabled,
-            authValidationEnabled = true)
-          apiDefinitionFactory.confidenceLevel shouldBe expectedDefinitionCL
-        }
       }
     }
   }
