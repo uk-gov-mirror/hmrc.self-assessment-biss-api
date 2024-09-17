@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-package api.models.domain
+package v3.retrieveBiss
 
-import support.UnitSpec
+import api.controllers.validators.Validator
+import v3.retrieveBiss.def1.Def1_RetrieveBISSValidator
+import v3.retrieveBiss.model.request.RetrieveBISSRequestData
 
-class CalculationIdSpec extends UnitSpec {
+import javax.inject.Singleton
 
-  "toString" should {
-    "return the CalculationId value" in {
-      val calculationId = CalculationId("some id")
-      calculationId.toString shouldBe "some id"
-    }
-  }
+@Singleton
+class RetrieveBISSValidatorFactory {
+
+  def validator(nino: String, typeOfBusiness: String, taxYear: String, businessId: String): Validator[RetrieveBISSRequestData] =
+    new Def1_RetrieveBISSValidator(nino, typeOfBusiness, taxYear, businessId)
 
 }

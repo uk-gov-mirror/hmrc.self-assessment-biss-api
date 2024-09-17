@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package v2.retrieveBiss.def1.model.response
+package v3.retrieveBiss.def1.model.response
 
 import play.api.libs.json.Json
 import support.UnitSpec
@@ -24,8 +24,8 @@ class ProfitSpec extends UnitSpec {
   private val json = Json.parse(
     """
       |{
-      |   "net": 0.00,
-      |   "taxable": 35.00
+      |        "net": 0.00,
+      |        "taxable": 35.00
       |}
       |""".stripMargin)
 

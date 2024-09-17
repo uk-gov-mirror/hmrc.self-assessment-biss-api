@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package api.models.domain
+package v3.retrieveBiss.def1.model.response
 
-import support.UnitSpec
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-class CalculationIdSpec extends UnitSpec {
+case class Profit(net: BigDecimal, taxable: BigDecimal)
 
-  "toString" should {
-    "return the CalculationId value" in {
-      val calculationId = CalculationId("some id")
-      calculationId.toString shouldBe "some id"
-    }
-  }
+object Profit {
 
+  implicit val reads: Reads[Profit] = (
+    (JsPath \ "netProfit").read[BigDecimal] and
+      (JsPath \ "taxableProfit").read[BigDecimal]
+    ) (Profit.apply _)
+
+  implicit val writes: OWrites[Profit] = Json.writes[Profit]
 }

@@ -14,17 +14,16 @@
  * limitations under the License.
  */
 
-package api.models.domain
+package v3.retrieveBiss.model.request
 
-import support.UnitSpec
+import api.models.domain.{BusinessId, Nino, TaxYear, TypeOfBusiness}
 
-class CalculationIdSpec extends UnitSpec {
-
-  "toString" should {
-    "return the CalculationId value" in {
-      val calculationId = CalculationId("some id")
-      calculationId.toString shouldBe "some id"
-    }
-  }
-
+sealed trait RetrieveBISSRequestData {
+  val nino: Nino
+  val typeOfBusiness: TypeOfBusiness
+  val taxYear: TaxYear
+  val businessId: BusinessId
 }
+
+case class Def1_RetrieveBISSRequestData(nino: Nino, typeOfBusiness: TypeOfBusiness, taxYear: TaxYear, businessId: BusinessId)
+    extends RetrieveBISSRequestData

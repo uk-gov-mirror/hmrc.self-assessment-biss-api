@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package v2.retrieveBiss.def1
+package v3.retrieveBiss.def1
 
 import api.controllers.validators.Validator
-import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYearMaximum, ResolveTypeOfBusiness}
+import api.controllers.validators.resolvers.{ResolveBusinessId, ResolveNino, ResolveTaxYear, ResolveTypeOfBusiness}
 import api.models.domain.TaxYear
 import api.models.domain.TypeOfBusiness._
 import api.models.errors.{MtdError, RuleTaxYearNotSupportedError}
 import cats.data.Validated
 import cats.data.Validated._
 import cats.implicits._
-import v2.retrieveBiss.model.request.{Def1_RetrieveBISSRequestData, RetrieveBISSRequestData}
+import v3.retrieveBiss.model.request.{Def1_RetrieveBISSRequestData, RetrieveBISSRequestData}
 
 import javax.inject.Singleton
 
@@ -32,15 +32,13 @@ import javax.inject.Singleton
 class Def1_RetrieveBISSValidator(nino: String, typeOfBusiness: String, taxYear: String, businessId: String)
     extends Validator[RetrieveBISSRequestData] {
 
-  private val resolveTaxYear = ResolveTaxYearMaximum(TaxYear.ending(2025))
-
   private val foreignPropertyMinimumTaxYear = TaxYear.fromMtd("2019-20")
 
   def validate: Validated[Seq[MtdError], RetrieveBISSRequestData] =
     (
       ResolveNino(nino),
       ResolveTypeOfBusiness(typeOfBusiness),
-      resolveTaxYear(taxYear),
+      ResolveTaxYear(taxYear),
       ResolveBusinessId(businessId)
     ).mapN(Def1_RetrieveBISSRequestData) andThen validateTaxYear
 

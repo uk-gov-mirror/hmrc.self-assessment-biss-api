@@ -14,43 +14,41 @@
  * limitations under the License.
  */
 
-package v2.retrieveBiss.def1.model.response
+package v3.retrieveBiss.def1.model.response
 
 import play.api.libs.json.Json
 import support.UnitSpec
 
-class ProfitSpec extends UnitSpec {
+class LossSpec extends UnitSpec {
 
-  private val json = Json.parse(
-    """
+  private val json = Json.parse("""
       |{
-      |   "net": 0.00,
-      |   "taxable": 35.00
+      |        "net": 0.00,
+      |        "taxable": 35.00
       |}
       |""".stripMargin)
 
-  private val desJson = Json.parse(
-    """
+  private val desJson = Json.parse("""
       |{
-      |    "netProfit": 0,
-      |    "taxableProfit": 35.00
+      |    "netLoss": 0,
+      |    "taxableLoss": 35.00
       |}
       |""".stripMargin)
 
   private val model =
-    Profit(
+    Loss(
       0,
       35.00
     )
 
-  "Profit" should {
+  "Loss" should {
 
     "write correctly to json" in {
       Json.toJson(model) shouldBe json
     }
 
     "read correctly from a json" in {
-      desJson.as[Profit] shouldBe model
+      desJson.as[Loss] shouldBe model
     }
   }
 

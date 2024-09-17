@@ -14,17 +14,20 @@
  * limitations under the License.
  */
 
-package api.models.domain
+package v3.retrieveBiss.def1.model.response
 
-import support.UnitSpec
+import play.api.libs.functional.syntax._
+import play.api.libs.json.{JsPath, Json, OWrites, Reads}
 
-class CalculationIdSpec extends UnitSpec {
+case class Loss(net: BigDecimal, taxable: BigDecimal)
 
-  "toString" should {
-    "return the CalculationId value" in {
-      val calculationId = CalculationId("some id")
-      calculationId.toString shouldBe "some id"
-    }
-  }
+object Loss {
+
+  implicit val reads: Reads[Loss] = (
+    (JsPath \ "netLoss").read[BigDecimal] and
+      (JsPath \ "taxableLoss").read[BigDecimal]
+    ) (Loss.apply _)
+
+  implicit val writes: OWrites[Loss] = Json.writes[Loss]
 
 }

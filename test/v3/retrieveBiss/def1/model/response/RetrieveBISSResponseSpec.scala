@@ -14,43 +14,30 @@
  * limitations under the License.
  */
 
-package v2.retrieveBiss.def1.model.response
+package v3.retrieveBiss.def1.model.response
 
 import play.api.libs.json.Json
 import support.UnitSpec
+import v3.fixtures.RetrieveBISSFixture
+import v3.retrieveBiss.model.response.Def1_RetrieveBISSResponse
 
-class ProfitSpec extends UnitSpec {
+class RetrieveBISSResponseSpec extends UnitSpec with RetrieveBISSFixture {
 
-  private val json = Json.parse(
-    """
-      |{
-      |   "net": 0.00,
-      |   "taxable": 35.00
-      |}
-      |""".stripMargin)
-
-  private val desJson = Json.parse(
-    """
-      |{
-      |    "netProfit": 0,
-      |    "taxableProfit": 35.00
-      |}
-      |""".stripMargin)
-
-  private val model =
-    Profit(
-      0,
-      35.00
-    )
-
-  "Profit" should {
+  "RetrieveBISSResponse" should {
 
     "write correctly to json" in {
-      Json.toJson(model) shouldBe json
+      Json.toJson(responseFull) shouldBe responseJsonFull
+    }
+    "write correctly to a minimal json" in {
+      Json.toJson(responseMin) shouldBe responseJsonMin
     }
 
     "read correctly from a json" in {
-      desJson.as[Profit] shouldBe model
+      downstreamResponseJsonFull.as[Def1_RetrieveBISSResponse] shouldBe responseFull
+    }
+
+    "read correctly from a minimal json" in {
+      downstreamResponseJsonMin.as[Def1_RetrieveBISSResponse] shouldBe responseMin
     }
   }
 

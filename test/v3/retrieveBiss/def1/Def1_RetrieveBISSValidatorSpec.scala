@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package v2.retrieveBiss.def1
+package v3.retrieveBiss.def1
 
 import api.models.domain.{BusinessId, Nino, TaxYear, TypeOfBusiness}
 import api.models.errors._
 import support.UnitSpec
-import v2.retrieveBiss.model.request.Def1_RetrieveBISSRequestData
+import v3.retrieveBiss.model.request.Def1_RetrieveBISSRequestData
 
 class Def1_RetrieveBISSValidatorSpec extends UnitSpec {
 
@@ -80,13 +80,6 @@ class Def1_RetrieveBISSValidatorSpec extends UnitSpec {
 
       result shouldBe Left(
         ErrorWrapper(correlationId, RuleTaxYearRangeInvalidError)
-      )
-    }
-
-    "given a tax year after 2024-25" in {
-      val result = validator(validNino, validTypeOfBusiness, "2025-26", validBusinessId).validateAndWrapResult()
-      result shouldBe Left(
-        ErrorWrapper(correlationId, RuleTaxYearNotSupportedError)
       )
     }
 
