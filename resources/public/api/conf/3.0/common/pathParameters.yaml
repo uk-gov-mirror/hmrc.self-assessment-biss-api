@@ -35,5 +35,5 @@ components:
       description: |
         The type of business the summary calculation is for.
       schema:
-        enum: [ foreign-property-fhl-eea, foreign-property, uk-property-non-fhl, uk-property-fhl, self-employment ]
+        enum: [ foreign-property-fhl-eea, foreign-property, uk-property, uk-property-fhl, self-employment ]
       required: true
