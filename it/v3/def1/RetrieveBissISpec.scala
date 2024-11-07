@@ -53,7 +53,7 @@ class RetrieveBissISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
 
       checkWith("self-employment", "self-employment")
       checkWith("uk-property-fhl", "fhl-property-uk")
-      checkWith("uk-property-non-fhl", "uk-property")
+      checkWith("uk-property", "uk-property")
       checkWith("foreign-property", "foreign-property")
       checkWith("foreign-property-fhl-eea", "fhl-property-eea")
 
@@ -183,7 +183,7 @@ class RetrieveBissISpec extends IntegrationBaseSpec with RetrieveBISSFixture {
       MtdIdLookupStub.ninoFound(nino)
       buildRequest(uri)
         .withHttpHeaders(
-          (ACCEPT, "application/vnd.hmrc.2.0+json"),
+          (ACCEPT, "application/vnd.hmrc.3.0+json"),
           (AUTHORIZATION, "Bearer 123") // some bearer token
         )
     }
