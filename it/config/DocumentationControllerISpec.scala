@@ -28,6 +28,11 @@ import scala.util.Try
 
 class DocumentationControllerISpec extends IntegrationBaseSpec {
 
+  override def servicesConfig: Map[String, Any] =
+    Map(
+      "api.3.0.endpoints.api-released-in-production" -> "true"
+    ) ++ super.servicesConfig
+
   private val apiDefinitionJson = Json.parse(s"""
        |{
        |  "api":{
